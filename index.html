@@ -6,12 +6,9 @@
   <title>Model MPC na dt</title>
   <style>
     :root {
-      --bg: #f6f1e8;
-      --bg-soft: #efe6d8;
-      --panel: rgba(255, 251, 245, 0.92);
-      --panel-strong: rgba(255, 255, 255, 0.96);
+      --panel: rgba(255, 251, 245, 0.94);
+      --panel-strong: rgba(255, 255, 255, 0.98);
       --line: rgba(53, 63, 77, 0.12);
-      --line-strong: rgba(53, 63, 77, 0.22);
       --text: #17212b;
       --muted: #596677;
       --teal: #117a72;
@@ -20,7 +17,7 @@
       --orange: #c56b3b;
       --green: #2f855a;
       --red: #c24141;
-      --cream: #fffaf3;
+      --purple: #7c3aed;
       --shadow: 0 18px 48px rgba(64, 45, 24, 0.12);
     }
 
@@ -40,7 +37,7 @@
     }
 
     .page {
-      width: min(1420px, calc(100vw - 28px));
+      width: min(1480px, calc(100vw - 28px));
       margin: 16px auto 26px;
       display: grid;
       gap: 14px;
@@ -57,7 +54,7 @@
     .hero {
       padding: 24px 26px;
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: 16px;
       align-items: end;
     }
@@ -81,7 +78,7 @@
     .hero p {
       margin: 10px 0 0;
       color: var(--muted);
-      max-width: 64ch;
+      max-width: 68ch;
       line-height: 1.5;
     }
 
@@ -147,7 +144,7 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
+      grid-template-columns: 390px minmax(0, 1fr);
       gap: 14px;
       align-items: start;
     }
@@ -209,6 +206,7 @@
 
     .controls-grid {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
       margin-top: 12px;
     }
@@ -239,6 +237,14 @@
       font-family: "Cascadia Mono", Consolas, monospace;
     }
 
+    .control small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.35;
+      margin-top: 7px;
+    }
+
     input[type="range"] {
       width: 100%;
       accent-color: var(--amber);
@@ -246,6 +252,7 @@
 
     .impact-grid {
       display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 9px;
       margin-top: 10px;
     }
@@ -316,7 +323,7 @@
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -414,7 +421,7 @@
 
     svg.chart {
       width: 100%;
-      height: 278px;
+      height: 318px;
       display: block;
       border-radius: 15px;
       background:
@@ -461,7 +468,9 @@
       .hero-chips,
       .preset-grid,
       .chart-grid,
-      .kpi-grid {
+      .kpi-grid,
+      .controls-grid,
+      .impact-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -474,44 +483,45 @@
         <div class="eyebrow">Interactive HMPC learning demo</div>
         <h1>Upper layer plans. Lower layer protects.</h1>
         <p>
-          A compact browser dashboard for a data center with PV, BESS, flexible compute, and cooling.
-          The data are synthetic, but the two-layer control contract, timings, and tradeoffs are the point.
+          A modular browser demo for a data center with PV, battery storage, flexible compute, UPS losses,
+          economizer support, and chiller-driven cooling. Each control below changes an explicit term in the
+          power or thermal balance rather than just changing the chart styling.
         </p>
       </div>
       <div class="hero-chips">
         <div class="chip">
           <strong>24 h / 15 min</strong>
-          <span>Economic MPC for cost, load shifting, and battery targeting</span>
+          <span>Economic MPC schedules grid exchange, battery dispatch, and thermal buffering.</span>
         </div>
         <div class="chip">
           <strong>60 min / 5 min</strong>
-          <span>Tracking MPC for thermal safety and grid target correction</span>
+          <span>Tracking MPC rebalances battery trim, fan effort, and chiller effort under disturbance.</span>
         </div>
         <div class="chip">
-          <strong>Assets</strong>
-          <span>PV, battery, flexible jobs, fans, chillers</span>
+          <strong>Cooling math</strong>
+          <span>Cooling power comes from fan intensity, economizer relief, and chiller COP.</span>
         </div>
         <div class="chip">
-          <strong>Hard limits</strong>
-          <span>Thermal line, battery reserve, actuator bounds</span>
+          <strong>Electrical math</strong>
+          <span>Facility load includes IT, UPS losses, auxiliary load, cooling power, PV, and BESS actions.</span>
         </div>
       </div>
     </section>
 
     <section class="contract panel">
       <div class="contract-box">
-        <strong>Forecasts</strong>
-        <span>Price, PV, ambient, base IT load</span>
+        <strong>Inputs</strong>
+        <span>Price, PV, ambient temperature, IT demand, and plant parameters</span>
       </div>
       <div class="contract-arrow">></div>
       <div class="contract-box">
         <strong>Upper MPC</strong>
-        <span>Grid target, workload shift, thermal target, battery plan</span>
+        <span>Workload shift, inlet-temperature trajectory, battery schedule, and grid target</span>
       </div>
       <div class="contract-arrow">></div>
       <div class="contract-box">
         <strong>Lower MPC</strong>
-        <span>Fan, chiller, battery trim to stay safe and track plan</span>
+        <span>Fan command, chiller command, and battery trim to hold safety and tracking</span>
       </div>
     </section>
 
@@ -519,12 +529,12 @@
       <aside class="sidebar panel">
         <section>
           <h2>Scenario</h2>
-          <div class="subtle">PV, flex load, and pre-cooling reshape the upper plan. Disturbance and battery power reshape the lower layer.</div>
+          <div class="subtle">Choose a storyline, then tune electrical and cooling parameters. Every slider changes an actual model term.</div>
           <div class="preset-grid" id="preset-grid"></div>
         </section>
 
         <section>
-          <h2>Tune Inputs</h2>
+          <h2>Plant Controls</h2>
           <div class="controls-grid">
             <div class="control">
               <div class="control-head">
@@ -532,6 +542,7 @@
                 <span id="pvPeak-value"></span>
               </div>
               <input id="pvPeak" type="range" min="2" max="12" step="0.5">
+              <small>Raises the daytime renewable supply available to the scheduler.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -539,6 +550,7 @@
                 <span id="bessEnergy-value"></span>
               </div>
               <input id="bessEnergy" type="range" min="4" max="30" step="0.5">
+              <small>Changes how much energy can be shifted into the evening peak.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -546,6 +558,7 @@
                 <span id="bessPower-value"></span>
               </div>
               <input id="bessPower" type="range" min="1" max="10" step="0.25">
+              <small>Limits both strategic dispatch and lower-layer tracking trim.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -553,13 +566,63 @@
                 <span id="flexShare-value"></span>
               </div>
               <input id="flexShare" type="range" min="0" max="45" step="1">
+              <small>Defines the fraction of IT load that can move across the day.</small>
             </div>
             <div class="control">
               <div class="control-head">
-                <strong>Pre-cooling</strong>
+                <strong>UPS efficiency</strong>
+                <span id="upsEfficiency-value"></span>
+              </div>
+              <input id="upsEfficiency" type="range" min="92" max="99.5" step="0.1">
+              <small>UPS losses are modeled as IT * (1 / efficiency - 1).</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Fan intensity</strong>
+                <span id="fanPowerRatio-value"></span>
+              </div>
+              <input id="fanPowerRatio" type="range" min="3" max="12" step="0.5">
+              <small>Design fan power as a percent of IT load before cubic fan scaling.</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Chiller COP</strong>
+                <span id="chillerCop-value"></span>
+              </div>
+              <input id="chillerCop" type="range" min="2.5" max="7.0" step="0.1">
+              <small>Mechanical cooling electric power is thermal load divided by COP.</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Economizer</strong>
+                <span id="economizerEffectiveness-value"></span>
+              </div>
+              <input id="economizerEffectiveness" type="range" min="0" max="85" step="1">
+              <small>Higher values let cool ambient air offset more chiller thermal load.</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Nominal inlet target</strong>
+                <span id="inletTarget-value"></span>
+              </div>
+              <input id="inletTarget" type="range" min="22" max="27" step="0.2">
+              <small>Lower targets protect thermal margin but increase cooling power.</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Pre-cooling bias</strong>
                 <span id="preCool-value"></span>
               </div>
               <input id="preCool" type="range" min="0" max="100" step="1">
+              <small>Shifts the inlet target downward during cheap or cool hours.</small>
+            </div>
+            <div class="control">
+              <div class="control-head">
+                <strong>Thermal mass</strong>
+                <span id="thermalMass-value"></span>
+              </div>
+              <input id="thermalMass" type="range" min="0.8" max="3.0" step="0.1">
+              <small>Higher values slow temperature drift and make pre-cooling more durable.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -567,6 +630,7 @@
                 <span id="priceVolatility-value"></span>
               </div>
               <input id="priceVolatility" type="range" min="60" max="180" step="1">
+              <small>Expands the day-ahead spread that drives charging and discharge incentives.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -574,6 +638,7 @@
                 <span id="disturbance-value"></span>
               </div>
               <input id="disturbance" type="range" min="0" max="100" step="1">
+              <small>Injects a one-hour PV miss, heat spike, and load jump into the lower layer.</small>
             </div>
             <div class="control">
               <div class="control-head">
@@ -581,6 +646,7 @@
                 <span id="selectedHour-value"></span>
               </div>
               <input id="selectedHour" type="range" min="0" max="23" step="1">
+              <small>Selects the one-hour lower-layer window shown in the tracking charts.</small>
             </div>
           </div>
         </section>
@@ -596,11 +662,11 @@
           <div class="story-card">
             <div class="story-badge" id="scenario-badge">Baseline</div>
             <strong id="story-title">Balanced spring day</strong>
-            <span id="story-text">Charge near midday, preserve energy for the evening ramp, then let the lower layer absorb the live miss.</span>
+            <span id="story-text">The scheduler uses flexible jobs, thermal buffering, and battery dispatch to reduce cost while holding a clear lower-layer recovery path.</span>
           </div>
           <div class="story-card">
-            <strong>Live narration</strong>
-            <span id="story-talking-points">Best charge window around 13:00. Best discharge window around 19:00. Tracking layer currently focused on 18:00.</span>
+            <strong>Model notes</strong>
+            <span id="story-talking-points">Cooling power is computed from UPS losses, fan intensity, economizer relief, and chiller COP. The lower layer changes fan and chiller commands, not just battery trim.</span>
           </div>
         </section>
 
@@ -610,7 +676,7 @@
           <div class="chart-card">
             <div class="chart-title">
               <h3>Economic inputs</h3>
-              <span>price plus schedulable load</span>
+              <span>price and load scheduling opportunity</span>
             </div>
             <div class="legend" id="legend-inputs"></div>
             <svg class="chart" id="chart-inputs"></svg>
@@ -619,7 +685,7 @@
           <div class="chart-card">
             <div class="chart-title">
               <h3>Upper-layer plan</h3>
-              <span>grid, battery, thermal target</span>
+              <span>grid, battery, and inlet target</span>
             </div>
             <div class="legend" id="legend-upper"></div>
             <svg class="chart" id="chart-upper"></svg>
@@ -637,7 +703,7 @@
           <div class="chart-card">
             <div class="chart-title">
               <h3>Lower-layer actuators</h3>
-              <span>battery trim and cooling response</span>
+              <span>fan, chiller, and battery trim</span>
             </div>
             <div class="legend" id="legend-actuator"></div>
             <svg class="chart" id="chart-actuator"></svg>
@@ -650,7 +716,7 @@
   <script>
     const COLORS = {
       price: "#b7791f",
-      baseLoad: "#8ea0b5",
+      baseLoad: "#93a5bb",
       scheduledLoad: "#2563eb",
       pv: "#2f855a",
       grid: "#117a72",
@@ -661,7 +727,7 @@
       hardLine: "#c24141",
       trim: "#c56b3b",
       fan: "#2563eb",
-      chiller: "#8d5cf6"
+      chiller: "#7c3aed"
     };
 
     const sliderMeta = {
@@ -669,7 +735,13 @@
       bessEnergy: { format: (v) => `${v.toFixed(1)} MWh` },
       bessPower: { format: (v) => `${v.toFixed(2)} MW` },
       flexShare: { format: (v) => `${v.toFixed(0)}%` },
+      upsEfficiency: { format: (v) => `${v.toFixed(1)}%` },
+      fanPowerRatio: { format: (v) => `${v.toFixed(1)}% IT` },
+      chillerCop: { format: (v) => `${v.toFixed(1)} COP` },
+      economizerEffectiveness: { format: (v) => `${v.toFixed(0)}%` },
+      inletTarget: { format: (v) => `${v.toFixed(1)} degC` },
       preCool: { format: (v) => `${v.toFixed(0)}%` },
+      thermalMass: { format: (v) => `${v.toFixed(1)}x` },
       priceVolatility: { format: (v) => `${v.toFixed(0)}%` },
       disturbance: { format: (v) => `${v.toFixed(0)}%` },
       selectedHour: { format: (v) => `${String(v).padStart(2, "0")}:00` }
@@ -678,15 +750,21 @@
     const presets = {
       baseline: {
         short: "Baseline",
-        description: "Balanced day",
-        title: "Balanced spring day",
-        note: "Charge around midday, keep evening reserve, and let the lower layer absorb a moderate miss.",
+        description: "Balanced operating day",
+        title: "Balanced spring operation",
+        note: "Moderate PV, moderate price spread, and enough battery to prepare for the evening ramp without over-cooling the hall.",
         values: {
           pvPeak: 6.5,
           bessEnergy: 12.0,
           bessPower: 4.0,
           flexShare: 18,
+          upsEfficiency: 96.8,
+          fanPowerRatio: 6.0,
+          chillerCop: 4.6,
+          economizerEffectiveness: 42,
+          inletTarget: 24.0,
           preCool: 52,
+          thermalMass: 1.4,
           priceVolatility: 100,
           disturbance: 30,
           selectedHour: 18
@@ -701,14 +779,20 @@
       solar: {
         short: "Solar Glut",
         description: "Deep midday trough",
-        title: "High solar and low midday prices",
-        note: "This scenario makes flexible load shifting and battery charging visibly stronger around the solar window.",
+        title: "High solar and negative midday pricing",
+        note: "Flexible jobs shift into the low-price solar window while the battery charges and the economizer offsets part of the chiller duty.",
         values: {
           pvPeak: 9.5,
           bessEnergy: 14.0,
           bessPower: 5.0,
-          flexShare: 25,
-          preCool: 58,
+          flexShare: 26,
+          upsEfficiency: 97.3,
+          fanPowerRatio: 5.5,
+          chillerCop: 5.2,
+          economizerEffectiveness: 50,
+          inletTarget: 24.4,
+          preCool: 45,
+          thermalMass: 1.5,
           priceVolatility: 118,
           disturbance: 22,
           selectedHour: 13
@@ -723,14 +807,20 @@
       heat: {
         short: "Heat Wave",
         description: "Thermal stress",
-        title: "Hot day with expensive cooling",
-        note: "Pre-cooling becomes more valuable and the lower layer uses more fan and chiller authority to stay inside the thermal line.",
+        title: "Hot day with cooling stress",
+        note: "A hotter ambient profile weakens the economizer and makes pre-cooling, thermal mass, and chiller efficiency much more important.",
         values: {
           pvPeak: 6.0,
           bessEnergy: 12.0,
           bessPower: 4.0,
           flexShare: 14,
+          upsEfficiency: 96.4,
+          fanPowerRatio: 7.5,
+          chillerCop: 3.9,
+          economizerEffectiveness: 18,
+          inletTarget: 23.4,
           preCool: 88,
+          thermalMass: 1.8,
           priceVolatility: 120,
           disturbance: 45,
           selectedHour: 16
@@ -745,14 +835,20 @@
       stress: {
         short: "Grid Stress",
         description: "Steep evening ramp",
-        title: "Scarcity pricing in the evening ramp",
-        note: "The upper layer tries to arrive full into the evening, and the lower layer leans harder on battery trim when the plant deviates.",
+        title: "Scarcity pricing and tight evening reserve",
+        note: "The upper layer arrives into the evening with more stored energy, while the lower layer uses stronger battery trim to hold the grid target under a live disturbance.",
         values: {
           pvPeak: 5.5,
           bessEnergy: 16.0,
           bessPower: 5.5,
           flexShare: 22,
+          upsEfficiency: 96.6,
+          fanPowerRatio: 6.5,
+          chillerCop: 4.2,
+          economizerEffectiveness: 32,
+          inletTarget: 24.1,
           preCool: 60,
+          thermalMass: 1.6,
           priceVolatility: 148,
           disturbance: 55,
           selectedHour: 19
@@ -811,14 +907,14 @@
     }
 
     function humanMoney(value) {
-      const sign = value > 0 ? "+" : "";
+      const sign = value >= 0 ? "+" : "-";
       return `${sign}EUR ${Math.abs(value).toFixed(0)}`;
     }
 
     function allocateFlexibleLoad(baseLoad, flexFraction, weights, dt) {
       const fixed = baseLoad.map((value) => value * (1 - flexFraction));
       const totalFlexEnergy = sum(baseLoad.map((value) => value * flexFraction * dt));
-      const maxFlexPerStep = baseLoad.map((value) => value * flexFraction * 2.2 + 0.18);
+      const maxFlexPerStep = baseLoad.map((value) => value * flexFraction * 2.2 + 0.20);
       const flexPower = new Array(baseLoad.length).fill(0);
       let remaining = totalFlexEnergy;
       let active = new Set(baseLoad.map((_, index) => index));
@@ -833,11 +929,11 @@
         const next = new Set();
         active.forEach((index) => {
           const share = remaining * (weights[index] / (totalWeight || 1));
-          const availableEnergy = Math.max(0, maxFlexPerStep[index] * dt - flexPower[index] * dt);
-          const add = Math.min(share, availableEnergy);
+          const available = Math.max(0, maxFlexPerStep[index] * dt - flexPower[index] * dt);
+          const add = Math.min(share, available);
           flexPower[index] += add / dt;
           leftover += share - add;
-          if (availableEnergy - add > 1e-6) {
+          if (available - add > 1e-6) {
             next.add(index);
           }
         });
@@ -862,6 +958,51 @@
       const hi = Math.min(series.length - 1, lo + 1);
       const frac = pos - lo;
       return series[lo] * (1 - frac) + series[hi] * frac;
+    }
+
+    function computeEconomizerFraction(ambient, targetTemp, economizerEffectiveness, fanControlPct = null) {
+      const baseEffectiveness = economizerEffectiveness / 100;
+      const margin = targetTemp + 1.5 - ambient;
+      const ambientWindow = clamp(margin / 10, 0, 1);
+      const fanMultiplier = fanControlPct === null ? 1 : (0.72 + 0.35 * clamp(fanControlPct / 100, 0.2, 1));
+      return clamp(baseEffectiveness * ambientWindow * fanMultiplier, 0, 0.88);
+    }
+
+    function computeFacilityLoads(itLoad, ambient, targetTemp, params, overrides = {}) {
+      const upsEfficiency = params.upsEfficiency / 100;
+      const fanPowerRatio = params.fanPowerRatio / 100;
+      const inletTemp = Math.max(20.5, targetTemp);
+      const fanControlPct = overrides.fanControlPct === undefined ? null : overrides.fanControlPct;
+      const chillerControlPct = overrides.chillerControlPct === undefined ? null : overrides.chillerControlPct;
+      const airflowBase = clamp(Math.pow(24 / inletTemp, 1.55) + 0.02 * Math.max(ambient - inletTemp, 0), 0.72, 1.9);
+      const fanMultiplier = fanControlPct === null ? 1 : (0.52 + 1.18 * Math.pow(clamp(fanControlPct / 100, 0.18, 1), 3));
+      const fanPower = itLoad * fanPowerRatio * airflowBase * fanMultiplier;
+      const upsLoss = itLoad * (1 / upsEfficiency - 1);
+      const auxiliaryLoad = 0.16 + 0.018 * itLoad;
+      const hallHeat = itLoad + upsLoss + auxiliaryLoad + fanPower;
+      const economizerFraction = computeEconomizerFraction(ambient, inletTemp, params.economizerEffectiveness, fanControlPct);
+      const economizerThermal = hallHeat * economizerFraction;
+      const requiredMechanicalThermal = Math.max(0, hallHeat - economizerThermal);
+      const chillerThermalMultiplier = chillerControlPct === null ? 1 : (0.45 + 0.90 * clamp(chillerControlPct / 100, 0.2, 1));
+      const chillerThermal = Math.min(requiredMechanicalThermal * 1.18 + 0.20, requiredMechanicalThermal * chillerThermalMultiplier);
+      const chillerPower = chillerThermal / params.chillerCop;
+      const facilityElectric = itLoad + upsLoss + auxiliaryLoad + fanPower + chillerPower;
+      const netHallHeat = hallHeat - economizerThermal - chillerThermal;
+
+      return {
+        itLoad,
+        upsLoss,
+        auxiliaryLoad,
+        fanPower,
+        hallHeat,
+        economizerFraction,
+        economizerThermal,
+        requiredMechanicalThermal,
+        chillerThermal,
+        chillerPower,
+        facilityElectric,
+        netHallHeat
+      };
     }
 
     function simulateDay(params, meta, optimize) {
@@ -902,26 +1043,27 @@
       });
 
       let scheduledLoad = [...baseLoad];
-      let thermalTarget = Array(points).fill(24.0);
+      let thermalTarget = Array(points).fill(params.inletTarget);
       let batteryPower = Array(points).fill(0);
 
       if (optimize) {
         const cheapness = normalise(basePrice.map((value) => -value));
-        const heatRelief = normalise(ambient.map((value) => -value));
-        const shiftWeights = hours.map((_, index) => 0.3 + 1.45 * cheapness[index] + 0.9 * pvNorm[index] + 0.35 * heatRelief[index]);
+        const coolHours = normalise(ambient.map((value) => -value));
+        const shiftWeights = hours.map((_, index) => 0.35 + 1.4 * cheapness[index] + 0.9 * pvNorm[index] + 0.4 * coolHours[index]);
         scheduledLoad = allocateFlexibleLoad(baseLoad, params.flexShare / 100, shiftWeights, dt);
 
-        const heatRisk = clamp((max(ambient) - 24) / 9, 0, 1);
+        const heatRisk = clamp((max(ambient) - params.inletTarget) / 10, 0, 1);
         const preCool = params.preCool / 100;
+        const thermalMassGain = Math.sqrt(params.thermalMass);
         thermalTarget = hours.map((hour, index) => {
-          const nightCharge = gaussian(hour, 4.8, 1.5) + 0.62 * gaussian(hour, 6.6, 1.2);
-          const hotAfternoon = gaussian(hour, 14.3, 2.5) * heatRisk;
+          const nightWindow = gaussian(hour, 4.8, 1.5) + 0.62 * gaussian(hour, 6.6, 1.2);
+          const hotAfternoon = gaussian(hour, 14.4, 2.5) * heatRisk;
           const expensiveEvening = gaussian(hour, 19.0, 1.7) * clamp((basePrice[index] - percentile(basePrice, 0.75)) / 90, 0, 1);
-          const target = 24
-            - (1.0 + 1.2 * heatRisk) * preCool * nightCharge
-            - 0.45 * preCool * hotAfternoon
-            + 0.65 * preCool * expensiveEvening;
-          return clamp(target, 21.5, 25.0);
+          const target = params.inletTarget
+            - 1.25 * preCool * thermalMassGain * nightWindow
+            - 0.45 * preCool * thermalMassGain * hotAfternoon
+            + 0.40 * preCool * expensiveEvening;
+          return clamp(target, params.inletTarget - 3.0, params.inletTarget + 0.8);
         });
 
         const energyCap = params.bessEnergy;
@@ -939,18 +1081,15 @@
         let soc = energyCap * 0.46;
 
         for (let index = 0; index < points; index += 1) {
-          const misc = 0.22 + 0.04 * scheduledLoad[index];
-          const cooling = 0.2 * scheduledLoad[index]
-            + 0.08 * Math.max(ambient[index] - thermalTarget[index], 0)
-            + 0.24 * Math.max(24 - thermalTarget[index], 0);
-          const facilityWithoutBattery = scheduledLoad[index] + misc + cooling - pv[index];
-          const cheapScore = clamp((p50 - basePrice[index]) / Math.max(8, p50 - p25), 0, 1) + 0.55 * clamp(pvNorm[index] - 0.35, 0, 1);
-          const expensiveScore = clamp((basePrice[index] - p75) / Math.max(8, p90 - p75), 0, 1) + 0.25 * gaussian(hours[index], 19.0, 1.6);
+          const facility = computeFacilityLoads(scheduledLoad[index], ambient[index], thermalTarget[index], params);
+          const facilityWithoutBattery = facility.facilityElectric - pv[index];
+          const cheapScore = clamp((p50 - basePrice[index]) / Math.max(8, p50 - p25), 0, 1) + 0.50 * clamp(pvNorm[index] - 0.35, 0, 1);
+          const expensiveScore = clamp((basePrice[index] - p75) / Math.max(8, p90 - p75), 0, 1) + 0.24 * gaussian(hours[index], 19.0, 1.6);
           const needEveningReserve = index < 66 ? clamp((targetEvening - soc) / Math.max(1, targetEvening), 0, 1) : 0;
           let command = powerCap * (0.95 * expensiveScore - 0.95 * cheapScore - 0.45 * needEveningReserve);
 
           if (facilityWithoutBattery < -0.15 && soc < maxSoc) {
-            command = Math.min(command, -Math.min(powerCap, Math.abs(facilityWithoutBattery) + 0.2));
+            command = Math.min(command, -Math.min(powerCap, Math.abs(facilityWithoutBattery) + 0.20));
           }
 
           if (hours[index] > 17 && basePrice[index] > p75) {
@@ -979,9 +1118,8 @@
         const highPrice = percentile(basePrice, 0.88);
 
         for (let index = 0; index < points; index += 1) {
-          const misc = 0.22 + 0.04 * scheduledLoad[index];
-          const cooling = 0.2 * scheduledLoad[index] + 0.08 * Math.max(ambient[index] - 24, 0);
-          const facilityWithoutBattery = scheduledLoad[index] + misc + cooling - pv[index];
+          const facility = computeFacilityLoads(scheduledLoad[index], ambient[index], thermalTarget[index], params);
+          const facilityWithoutBattery = facility.facilityElectric - pv[index];
           let command = 0;
 
           if (facilityWithoutBattery < -0.2 && soc < maxSoc) {
@@ -1006,6 +1144,11 @@
       let runningSoc = energyCap * (optimize ? 0.46 : 0.5);
       const minSoc = energyCap * (optimize ? 0.15 : 0.2);
       const maxSoc = energyCap * (optimize ? 0.95 : 0.9);
+      const facilityElectric = [];
+      const upsLosses = [];
+      const fanPower = [];
+      const chillerPower = [];
+      const economizerShare = [];
 
       for (let index = 0; index < points; index += 1) {
         if (batteryPower[index] < 0) {
@@ -1015,19 +1158,29 @@
         }
         runningSoc = clamp(runningSoc, minSoc, maxSoc);
         soc.push(runningSoc);
+
+        const facility = computeFacilityLoads(scheduledLoad[index], ambient[index], thermalTarget[index], params);
+        facilityElectric.push(facility.facilityElectric);
+        upsLosses.push(facility.upsLoss);
+        fanPower.push(facility.fanPower);
+        chillerPower.push(facility.chillerPower);
+        economizerShare.push(facility.economizerFraction);
       }
 
-      const miscLoad = scheduledLoad.map((value) => 0.22 + 0.04 * value);
-      const coolingLoad = scheduledLoad.map((value, index) => {
-        return 0.2 * value
-          + 0.08 * Math.max(ambient[index] - thermalTarget[index], 0)
-          + 0.24 * Math.max(24 - thermalTarget[index], 0);
-      });
-      const facilityLoad = scheduledLoad.map((value, index) => value + miscLoad[index] + coolingLoad[index]);
-      const grid = facilityLoad.map((value, index) => value - pv[index] - batteryPower[index]);
+      const grid = facilityElectric.map((value, index) => value - pv[index] - batteryPower[index]);
       const importCost = sum(grid.map((value, index) => Math.max(value, 0) * basePrice[index] * dt));
       const exportRevenue = sum(grid.map((value, index) => Math.max(-value, 0) * basePrice[index] * 0.9 * dt));
       const shiftedEnergy = 0.5 * sum(scheduledLoad.map((value, index) => Math.abs(value - baseLoad[index]) * dt));
+      const totalItEnergy = sum(scheduledLoad.map((value) => value * dt));
+      const totalFacilityEnergy = sum(facilityElectric.map((value) => value * dt));
+      const totalEconomizerThermal = sum(economizerShare.map((value, index) => {
+        const facility = computeFacilityLoads(scheduledLoad[index], ambient[index], thermalTarget[index], params);
+        return facility.economizerThermal * dt;
+      }));
+      const totalHallHeat = sum(scheduledLoad.map((value, index) => {
+        const facility = computeFacilityLoads(scheduledLoad[index], ambient[index], thermalTarget[index], params);
+        return facility.hallHeat * dt;
+      }));
 
       return {
         dt,
@@ -1040,8 +1193,11 @@
         thermalTarget,
         batteryPower,
         soc,
-        coolingLoad,
-        facilityLoad,
+        facilityElectric,
+        upsLosses,
+        fanPower,
+        chillerPower,
+        economizerShare,
         grid,
         kpis: {
           netCost: importCost - exportRevenue,
@@ -1049,7 +1205,11 @@
           shiftedEnergy,
           minThermalTarget: min(thermalTarget),
           eveningSoc: interpolateSeries(soc, 18),
-          finalSoc: soc[soc.length - 1]
+          finalSoc: soc[soc.length - 1],
+          avgPue: totalFacilityEnergy / Math.max(totalItEnergy, 1e-6),
+          upsLossEnergy: sum(upsLosses.map((value) => value * dt)),
+          economizerFraction: totalHallHeat > 0 ? totalEconomizerThermal / totalHallHeat : 0,
+          peakCoolingPower: max(fanPower.map((value, index) => value + chillerPower[index]))
         }
       };
     }
@@ -1059,7 +1219,8 @@
       const points = 12;
       const dt = 1 / 12;
       const severity = params.disturbance / 100;
-      const hardLimit = 27.0;
+      const hardLimit = params.inletTarget + 2.7;
+      const time = Array.from({ length: points }, (_, index) => hour + index * dt);
       const targetGrid = [];
       const actualGrid = [];
       const targetTemp = [];
@@ -1067,9 +1228,7 @@
       const batteryTrim = [];
       const fanPct = [];
       const chillerPct = [];
-      const time = Array.from({ length: points }, (_, index) => hour + index * dt);
-
-      let tempState = clamp(interpolateSeries(plan.thermalTarget, hour) + 0.3 + 0.8 * severity, 22.2, 26.3);
+      let tempState = clamp(interpolateSeries(plan.thermalTarget, hour) + 0.25 + 0.7 * severity, params.inletTarget - 1.0, hardLimit - 0.2);
       let socState = interpolateSeries(plan.soc, hour);
       let prevGridError = 0;
 
@@ -1079,9 +1238,8 @@
         const plannedBattery = interpolateSeries(plan.batteryPower, t);
         const plannedLoad = interpolateSeries(plan.scheduledLoad, t);
         const plannedTemp = interpolateSeries(plan.thermalTarget, t);
-        const plannedCooling = interpolateSeries(plan.coolingLoad, t);
-        const basePv = interpolateSeries(plan.pv, t);
         const baseAmbient = interpolateSeries(plan.ambient, t);
+        const basePv = interpolateSeries(plan.pv, t);
 
         const pvShock = gaussian(index, 3.0, 1.1);
         const loadShock = gaussian(index, 6.7, 1.5);
@@ -1089,24 +1247,25 @@
         const livePv = Math.max(0, basePv * (1 - severity * (0.12 + 0.56 * pvShock)));
         const liveLoad = plannedLoad * (1 + severity * (0.02 + 0.12 * loadShock));
         const liveAmbient = baseAmbient + severity * (0.6 + 2.2 * heatShock);
-
         const thermalError = tempState - plannedTemp;
         const safetyBoost = clamp((tempState - (hardLimit - 0.35)) / 1.0, 0, 1);
-        const fan = clamp(
-          36 + 18 * thermalError + 8 * (liveAmbient - baseAmbient) + 12 * (liveLoad - plannedLoad) + 28 * safetyBoost,
-          30,
+        const fanCommand = clamp(
+          34 + 20 * thermalError + 8 * (liveAmbient - baseAmbient) + 8 * (liveLoad - plannedLoad) + 26 * safetyBoost,
+          22,
           100
         );
-        const chillerPctRaw = clamp(
-          18 + 16 * Math.max(liveAmbient - plannedTemp, 0) + 26 * Math.max(thermalError, 0) + 24 * safetyBoost,
-          18,
+        const chillerCommand = clamp(
+          36 + 24 * thermalError + 10 * Math.max(liveAmbient - plannedTemp, 0) + 20 * safetyBoost,
+          20,
           100
         );
-        const chillerMw = 0.7 + 4.0 * (chillerPctRaw / 100);
-        const coolingActual = 0.18 * liveLoad + 0.0075 * fan + chillerMw;
-        const misc = 0.22 + 0.04 * liveLoad;
-        const rawGrid = liveLoad + misc + coolingActual - livePv - plannedBattery;
 
+        const actualFacility = computeFacilityLoads(liveLoad, liveAmbient, plannedTemp, params, {
+          fanControlPct: fanCommand,
+          chillerControlPct: chillerCommand
+        });
+
+        const rawGrid = actualFacility.facilityElectric - livePv - plannedBattery;
         const dischargeLimitBySoc = Math.max(0, (socState - params.bessEnergy * 0.15) * 0.95 / dt);
         const chargeLimitBySoc = Math.max(0, (params.bessEnergy * 0.95 - socState) / (dt * 0.95));
         const maxDischarge = Math.min(params.bessPower, dischargeLimitBySoc);
@@ -1114,7 +1273,7 @@
         const trimRequest = 0.92 * (rawGrid - plannedGrid) + 0.32 * prevGridError;
         const totalBattery = clamp(plannedBattery + trimRequest, -maxCharge, maxDischarge);
         const trim = totalBattery - plannedBattery;
-        const liveGrid = liveLoad + misc + coolingActual - livePv - totalBattery;
+        const liveGrid = actualFacility.facilityElectric - livePv - totalBattery;
 
         if (totalBattery < 0) {
           socState += -totalBattery * dt * 0.95;
@@ -1123,11 +1282,10 @@
         }
         socState = clamp(socState, params.bessEnergy * 0.15, params.bessEnergy * 0.95);
 
-        const tempRate = 0.38 * (liveAmbient - tempState)
-          + 0.70 * (liveLoad - plannedLoad)
-          - 0.62 * (coolingActual - plannedCooling)
-          + 0.32 * severity * heatShock;
-        tempState = clamp(tempState + tempRate * dt, 21.2, 28.4);
+        const thermalDrift = (0.16 * actualFacility.netHallHeat / params.thermalMass)
+          + 0.018 * (liveAmbient - tempState)
+          + 0.10 * severity * heatShock;
+        tempState = clamp(tempState + thermalDrift, params.inletTarget - 2.0, hardLimit + 1.4);
         prevGridError = liveGrid - plannedGrid;
 
         targetGrid.push(plannedGrid);
@@ -1135,13 +1293,14 @@
         targetTemp.push(plannedTemp);
         actualTemp.push(tempState);
         batteryTrim.push(trim);
-        fanPct.push(fan);
-        chillerPct.push(chillerPctRaw);
+        fanPct.push(fanCommand);
+        chillerPct.push(chillerCommand);
       }
 
       return {
         hour,
         time,
+        hardLimit,
         targetGrid,
         actualGrid,
         targetTemp,
@@ -1210,8 +1369,8 @@
     function renderChart(targetId, config) {
       const svg = document.getElementById(targetId);
       const width = Math.max(660, Math.round(svg.getBoundingClientRect().width || 660));
-      const height = 278;
-      const margin = { top: 18, right: 56, bottom: 34, left: 54 };
+      const height = 318;
+      const margin = { top: 20, right: 68, bottom: 56, left: 70 };
       const plotWidth = width - margin.left - margin.right;
       const plotHeight = height - margin.top - margin.bottom;
       const n = config.labels.length;
@@ -1219,7 +1378,7 @@
       const rightSeries = config.series.filter((series) => series.axis === "right");
 
       const leftValues = leftSeries.flatMap((series) => series.data);
-      const rightValues = rightSeries.flatMap((series) => series.data);
+      const rightValues = rightSeries.length ? rightSeries.flatMap((series) => series.data) : [0, 1];
 
       const padDomain = (domain, includeZero = false) => {
         let [lo, hi] = domain;
@@ -1260,7 +1419,7 @@
       const barMarkup = (series) => {
         const yMap = series.axis === "right" ? yRight : yLeft;
         const zero = yMap(0);
-        const barWidth = plotWidth / Math.max(1, n) * 0.7;
+        const barWidth = plotWidth / Math.max(1, n) * 0.68;
         return series.data.map((value, index) => {
           const x = xPos(index) - barWidth / 2;
           const y = Math.min(yMap(value), zero);
@@ -1297,7 +1456,7 @@
         markup += `
           <line x1="${x.toFixed(2)}" y1="${margin.top}" x2="${x.toFixed(2)}" y2="${height - margin.bottom}"
             stroke="rgba(23,33,43,0.05)" stroke-width="1"></line>
-          <text x="${x.toFixed(2)}" y="${height - 10}" text-anchor="middle" fill="rgba(23,33,43,0.48)" font-size="11">
+          <text x="${x.toFixed(2)}" y="${height - 30}" text-anchor="middle" fill="rgba(23,33,43,0.48)" font-size="11">
             ${config.labels[index]}
           </text>
         `;
@@ -1346,6 +1505,25 @@
         });
       }
 
+      markup += `
+        <text x="${margin.left + plotWidth / 2}" y="${height - 8}" text-anchor="middle" fill="rgba(23,33,43,0.62)" font-size="12">
+          ${config.bottomLabel}
+        </text>
+        <text x="18" y="${margin.top + plotHeight / 2}" text-anchor="middle" fill="rgba(23,33,43,0.62)" font-size="12"
+          transform="rotate(-90 18 ${margin.top + plotHeight / 2})">
+          ${config.leftLabel}
+        </text>
+      `;
+
+      if (rightSeries.length) {
+        markup += `
+          <text x="${width - 14}" y="${margin.top + plotHeight / 2}" text-anchor="middle" fill="rgba(23,33,43,0.62)" font-size="12"
+            transform="rotate(90 ${width - 14} ${margin.top + plotHeight / 2})">
+            ${config.rightLabel}
+          </text>
+        `;
+      }
+
       svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
       svg.setAttribute("width", width);
       svg.setAttribute("height", height);
@@ -1360,22 +1538,30 @@
       document.getElementById("story-title").textContent = preset.title;
       document.getElementById("story-text").textContent = preset.note;
       document.getElementById("story-talking-points").textContent =
-        `Charge bias near ${String(Math.floor(cheapestHour)).padStart(2, "0")}:00, discharge bias near ${String(Math.floor(priciestHour)).padStart(2, "0")}:00, and the lower layer is re-tracking the ${String(lower.hour).padStart(2, "0")}:00 hour with ${params.disturbance.toFixed(0)}% disturbance severity.`;
+        `Best charge window near ${String(Math.floor(cheapestHour)).padStart(2, "0")}:00, best discharge window near ${String(Math.floor(priciestHour)).padStart(2, "0")}:00, and the lower layer is retuning the ${String(lower.hour).padStart(2, "0")}:00 window while respecting a hard inlet line at ${lower.hardLimit.toFixed(1)} degC.`;
     }
 
-    function renderImpacts(plan, lower) {
+    function renderImpacts(plan, lower, params) {
       const items = [
         {
           value: `${plan.kpis.shiftedEnergy.toFixed(1)} MWh`,
-          label: "Workload shifted into cheaper hours"
+          label: "Flexible IT energy moved"
         },
         {
-          value: `${(24 - plan.kpis.minThermalTarget).toFixed(1)} C`,
-          label: "Thermal buffer below nominal"
+          value: `${(plan.kpis.economizerFraction * 100).toFixed(0)}%`,
+          label: "Hall heat offset by economizer"
         },
         {
-          value: `${plan.kpis.eveningSoc.toFixed(1)} MWh`,
-          label: "Battery energy available at 18:00"
+          value: `${plan.kpis.upsLossEnergy.toFixed(1)} MWh`,
+          label: "Daily UPS loss energy"
+        },
+        {
+          value: `${plan.kpis.peakCoolingPower.toFixed(2)} MW`,
+          label: "Peak cooling electric power"
+        },
+        {
+          value: `${params.thermalMass.toFixed(1)}x`,
+          label: "Thermal mass multiplier"
         },
         {
           value: `${lower.maxTrim.toFixed(2)} MW`,
@@ -1394,12 +1580,12 @@
     function renderKpis(plan, baseline, lower) {
       const savings = baseline.kpis.netCost - plan.kpis.netCost;
       const peakCut = baseline.kpis.peakGrid - plan.kpis.peakGrid;
-      const tempMargin = 27 - lower.maxTemp;
+      const tempMargin = lower.hardLimit - lower.maxTemp;
       const cards = [
         {
-          value: savings >= 0 ? humanMoney(savings) : `-EUR ${Math.abs(savings).toFixed(0)}`,
-          label: "Cost delta vs flat baseline",
-          delta: savings >= 0 ? "economic MPC wins" : "more expensive than baseline",
+          value: humanMoney(savings),
+          label: "Cost delta vs fixed baseline",
+          delta: savings >= 0 ? "economic MPC reduces energy spend" : "more costly than baseline",
           cls: savings >= 0 ? "good" : "bad"
         },
         {
@@ -1409,21 +1595,27 @@
           cls: peakCut >= 0 ? "good" : "bad"
         },
         {
-          value: `${plan.kpis.shiftedEnergy.toFixed(1)} MWh`,
-          label: "Flexible load moved",
-          delta: "upper-layer scheduling effect",
+          value: `${plan.kpis.avgPue.toFixed(3)}`,
+          label: "Average PUE proxy",
+          delta: `includes UPS, fan, chiller, and auxiliary loads`,
           cls: "warn"
         },
         {
-          value: `${lower.maxTemp.toFixed(1)} C`,
-          label: "Max inlet temperature",
-          delta: tempMargin >= 0 ? `${tempMargin.toFixed(1)} C below hard line` : `${Math.abs(tempMargin).toFixed(1)} C above hard line`,
+          value: `${plan.kpis.eveningSoc.toFixed(1)} MWh`,
+          label: "Battery at 18:00",
+          delta: `final SOC ${plan.kpis.finalSoc.toFixed(1)} MWh`,
+          cls: "warn"
+        },
+        {
+          value: `${lower.maxTemp.toFixed(1)} degC`,
+          label: "Max tracked inlet temperature",
+          delta: tempMargin >= 0 ? `${tempMargin.toFixed(1)} degC below hard line` : `${Math.abs(tempMargin).toFixed(1)} degC above hard line`,
           cls: tempMargin >= 0 ? "good" : "bad"
         },
         {
           value: `${lower.maxTrackingError.toFixed(2)} MW`,
-          label: "Max tracking error",
-          delta: `trimmed by up to ${lower.maxTrim.toFixed(2)} MW`,
+          label: "Max one-hour tracking error",
+          delta: `battery trim reached ${lower.maxTrim.toFixed(2)} MW`,
           cls: lower.maxTrackingError < 1.2 ? "good" : "warn"
         }
       ];
@@ -1440,7 +1632,7 @@
     function renderCharts(plan, lower) {
       const dayLabels = plan.hours.map((hour, index) => index % 12 === 0 ? `${String(hour).padStart(2, "0")}:00` : "");
       makeLegend("legend-inputs", [
-        { name: "Price", color: COLORS.price },
+        { name: "Day-ahead price", color: COLORS.price },
         { name: "Base IT load", color: COLORS.baseLoad },
         { name: "Scheduled IT load", color: COLORS.scheduledLoad }
       ]);
@@ -1453,6 +1645,9 @@
         ],
         leftFormatter: (value) => `${value.toFixed(0)}`,
         rightFormatter: (value) => `${value.toFixed(1)}`,
+        leftLabel: "Price (EUR/MWh)",
+        rightLabel: "IT load (MW)",
+        bottomLabel: "Time of day",
         tickEvery: 12
       });
 
@@ -1460,7 +1655,7 @@
         { name: "PV forecast", color: COLORS.pv },
         { name: "Grid target", color: COLORS.grid },
         { name: "Battery dispatch", color: COLORS.battery },
-        { name: "Thermal target", color: COLORS.tempTarget }
+        { name: "Inlet target", color: COLORS.tempTarget }
       ]);
       renderChart("chart-upper", {
         labels: dayLabels,
@@ -1473,6 +1668,9 @@
         ],
         leftFormatter: (value) => `${value.toFixed(1)}`,
         rightFormatter: (value) => `${value.toFixed(1)}`,
+        leftLabel: "Power (MW)",
+        rightLabel: "Target inlet (degC)",
+        bottomLabel: "Time of day",
         includeZeroLeft: true,
         tickEvery: 12
       });
@@ -1499,16 +1697,19 @@
         ],
         leftFormatter: (value) => `${value.toFixed(1)}`,
         rightFormatter: (value) => `${value.toFixed(1)}`,
+        leftLabel: "Grid power (MW)",
+        rightLabel: "Inlet temperature (degC)",
+        bottomLabel: "Five-minute interval",
         thresholds: [
-          { value: 27, axis: "right", color: COLORS.hardLine, label: "27 C" }
+          { value: lower.hardLimit, axis: "right", color: COLORS.hardLine, label: `${lower.hardLimit.toFixed(1)} degC` }
         ],
         tickEvery: 2
       });
 
       makeLegend("legend-actuator", [
         { name: "Battery trim", color: COLORS.trim },
-        { name: "Fan", color: COLORS.fan },
-        { name: "Chiller", color: COLORS.chiller }
+        { name: "Fan command", color: COLORS.fan },
+        { name: "Chiller command", color: COLORS.chiller }
       ]);
       renderChart("chart-actuator", {
         labels: zoomLabels,
@@ -1519,6 +1720,9 @@
         ],
         leftFormatter: (value) => `${value.toFixed(1)}`,
         rightFormatter: (value) => `${value.toFixed(0)}`,
+        leftLabel: "Battery trim (MW)",
+        rightLabel: "Actuator command (%)",
+        bottomLabel: "Five-minute interval",
         includeZeroLeft: true,
         rightDomain: [0, 100],
         tickEvery: 2
@@ -1534,7 +1738,7 @@
       const lower = simulateLowerLayer(plan, params);
 
       renderStory(plan, lower, params);
-      renderImpacts(plan, lower);
+      renderImpacts(plan, lower, params);
       renderKpis(plan, baseline, lower);
       renderCharts(plan, lower);
     }
