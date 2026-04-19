@@ -20,14 +20,6 @@ Open [index.html](C:/Users/arshah/Model-MPC-na-dt/index.html) in your browser.
 
 Double-click `open-demo.bat`.
 
-## What to show in the interview
-
-1. Start with the architecture section and explain why the control problem is split into two layers.
-2. Use the forecast charts to explain what the upper controller sees.
-3. Show the upper-layer outputs: grid target, battery schedule, and thermal pre-cooling target.
-4. Move the `Lower-layer zoom hour` slider to the evening peak and explain how the lower controller handles disturbance.
-5. Switch presets such as `Heat Wave` or `Grid Stress` to show safety-first behavior.
-
 ## Files
 
 - `index.html`: the self-contained interactive dashboard
