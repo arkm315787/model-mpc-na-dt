@@ -59,12 +59,34 @@
       align-items: end;
     }
 
+    .eyebrow-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
     .eyebrow {
       color: var(--teal);
       text-transform: uppercase;
       letter-spacing: 0.13em;
       font-size: 0.78rem;
-      margin-bottom: 10px;
+      margin: 0;
+    }
+
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(47, 133, 90, 0.1);
+      border: 1px solid rgba(47, 133, 90, 0.16);
+      color: var(--green);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
 
     h1 {
@@ -89,10 +111,22 @@
     }
 
     .chip {
+      position: relative;
       padding: 14px 16px;
       border-radius: 18px;
       border: 1px solid rgba(23, 33, 43, 0.07);
       background: rgba(255, 255, 255, 0.55);
+      overflow: hidden;
+    }
+
+    .chip::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(17, 122, 114, 0.62), rgba(37, 99, 235, 0.45));
     }
 
     .chip strong {
@@ -164,6 +198,20 @@
       letter-spacing: 0.02em;
     }
 
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      background: rgba(23, 33, 43, 0.05);
+      color: var(--muted);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
     .subtle {
       color: var(--muted);
       font-size: 0.9rem;
@@ -206,9 +254,41 @@
 
     .controls-grid {
       display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .control-section {
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(23, 33, 43, 0.08);
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    .control-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .control-section-header strong {
+      font-size: 0.92rem;
+    }
+
+    .control-section-header span {
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .control-section-grid {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 12px;
     }
 
     .control {
@@ -284,7 +364,7 @@
     .story {
       padding: 16px 18px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.05fr 1fr 0.9fr;
       gap: 12px;
     }
 
@@ -319,6 +399,38 @@
       color: var(--muted);
       font-size: 0.88rem;
       line-height: 1.42;
+    }
+
+    .story-metric {
+      display: grid;
+      gap: 10px;
+    }
+
+    .story-metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(23, 33, 43, 0.08);
+    }
+
+    .story-metric-row:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .story-metric-row strong {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .story-metric-row span {
+      font-size: 0.82rem;
+      color: var(--text);
+      text-align: right;
     }
 
     .kpi-grid {
@@ -372,10 +484,20 @@
     }
 
     .chart-card {
+      position: relative;
       padding: 14px 15px 12px;
       border-radius: 20px;
       border: 1px solid rgba(23, 33, 43, 0.08);
       background: var(--panel-strong);
+      overflow: hidden;
+    }
+
+    .chart-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(17, 122, 114, 0.56), rgba(197, 107, 59, 0.4), rgba(37, 99, 235, 0.38));
     }
 
     .chart-title {
@@ -469,7 +591,7 @@
       .preset-grid,
       .chart-grid,
       .kpi-grid,
-      .controls-grid,
+      .control-section-grid,
       .impact-grid {
         grid-template-columns: 1fr;
       }
@@ -480,7 +602,10 @@
   <div class="page">
     <section class="hero panel">
       <div>
-        <div class="eyebrow">Interactive HMPC learning demo</div>
+        <div class="eyebrow-row">
+          <div class="eyebrow">Interactive HMPC learning demo</div>
+          <div class="hero-status">Model-driven control surface</div>
+        </div>
         <h1>Upper layer plans. Lower layer protects.</h1>
         <p>
           A modular browser demo for a data center with PV, battery storage, flexible compute, UPS losses,
@@ -528,130 +653,159 @@
     <section class="layout">
       <aside class="sidebar panel">
         <section>
+          <div class="section-tag">Scenario</div>
           <h2>Scenario</h2>
           <div class="subtle">Choose a storyline, then tune electrical and cooling parameters. Every slider changes an actual model term.</div>
           <div class="preset-grid" id="preset-grid"></div>
         </section>
 
         <section>
+          <div class="section-tag">Control surface</div>
           <h2>Plant Controls</h2>
           <div class="controls-grid">
-            <div class="control">
-              <div class="control-head">
-                <strong>PV peak</strong>
-                <span id="pvPeak-value"></span>
+            <div class="control-section">
+              <div class="control-section-header">
+                <strong>Energy assets</strong>
+                <span>Supply and storage</span>
               </div>
-              <input id="pvPeak" type="range" min="2" max="12" step="0.5">
-              <small>Raises the daytime renewable supply available to the scheduler.</small>
+              <div class="control-section-grid">
+                <div class="control">
+                  <div class="control-head">
+                    <strong>PV peak</strong>
+                    <span id="pvPeak-value"></span>
+                  </div>
+                  <input id="pvPeak" type="range" min="2" max="12" step="0.5">
+                  <small>Raises the daytime renewable supply available to the scheduler.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>BESS energy</strong>
+                    <span id="bessEnergy-value"></span>
+                  </div>
+                  <input id="bessEnergy" type="range" min="4" max="30" step="0.5">
+                  <small>Changes how much energy can be shifted into the evening peak.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>BESS power</strong>
+                    <span id="bessPower-value"></span>
+                  </div>
+                  <input id="bessPower" type="range" min="1" max="10" step="0.25">
+                  <small>Limits both strategic dispatch and lower-layer tracking trim.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Flexible load</strong>
+                    <span id="flexShare-value"></span>
+                  </div>
+                  <input id="flexShare" type="range" min="0" max="45" step="1">
+                  <small>Defines the fraction of IT load that can move across the day.</small>
+                </div>
+              </div>
             </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>BESS energy</strong>
-                <span id="bessEnergy-value"></span>
+
+            <div class="control-section">
+              <div class="control-section-header">
+                <strong>Electrical plant</strong>
+                <span>Losses and economics</span>
               </div>
-              <input id="bessEnergy" type="range" min="4" max="30" step="0.5">
-              <small>Changes how much energy can be shifted into the evening peak.</small>
+              <div class="control-section-grid">
+                <div class="control">
+                  <div class="control-head">
+                    <strong>UPS efficiency</strong>
+                    <span id="upsEfficiency-value"></span>
+                  </div>
+                  <input id="upsEfficiency" type="range" min="92" max="99.5" step="0.1">
+                  <small>UPS losses are modeled as IT * (1 / efficiency - 1).</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Price spread</strong>
+                    <span id="priceVolatility-value"></span>
+                  </div>
+                  <input id="priceVolatility" type="range" min="60" max="180" step="1">
+                  <small>Expands the day-ahead spread that drives charging and discharge incentives.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Disturbance</strong>
+                    <span id="disturbance-value"></span>
+                  </div>
+                  <input id="disturbance" type="range" min="0" max="100" step="1">
+                  <small>Injects a one-hour PV miss, heat spike, and load jump into the lower layer.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Zoom hour</strong>
+                    <span id="selectedHour-value"></span>
+                  </div>
+                  <input id="selectedHour" type="range" min="0" max="23" step="1">
+                  <small>Selects the one-hour lower-layer window shown in the tracking charts.</small>
+                </div>
+              </div>
             </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>BESS power</strong>
-                <span id="bessPower-value"></span>
+
+            <div class="control-section">
+              <div class="control-section-header">
+                <strong>Thermal policy and runtime</strong>
+                <span>Cooling behavior</span>
               </div>
-              <input id="bessPower" type="range" min="1" max="10" step="0.25">
-              <small>Limits both strategic dispatch and lower-layer tracking trim.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Flexible load</strong>
-                <span id="flexShare-value"></span>
+              <div class="control-section-grid">
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Fan intensity</strong>
+                    <span id="fanPowerRatio-value"></span>
+                  </div>
+                  <input id="fanPowerRatio" type="range" min="3" max="12" step="0.5">
+                  <small>Design fan power as a percent of IT load before cubic fan scaling.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Chiller COP</strong>
+                    <span id="chillerCop-value"></span>
+                  </div>
+                  <input id="chillerCop" type="range" min="2.5" max="7.0" step="0.1">
+                  <small>Mechanical cooling electric power is thermal load divided by COP.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Economizer</strong>
+                    <span id="economizerEffectiveness-value"></span>
+                  </div>
+                  <input id="economizerEffectiveness" type="range" min="0" max="85" step="1">
+                  <small>Higher values let cool ambient air offset more chiller thermal load.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Nominal inlet target</strong>
+                    <span id="inletTarget-value"></span>
+                  </div>
+                  <input id="inletTarget" type="range" min="22" max="27" step="0.2">
+                  <small>Lower targets protect thermal margin but increase cooling power.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Pre-cooling bias</strong>
+                    <span id="preCool-value"></span>
+                  </div>
+                  <input id="preCool" type="range" min="0" max="100" step="1">
+                  <small>Shifts the inlet target downward during cheap or cool hours.</small>
+                </div>
+                <div class="control">
+                  <div class="control-head">
+                    <strong>Thermal mass</strong>
+                    <span id="thermalMass-value"></span>
+                  </div>
+                  <input id="thermalMass" type="range" min="0.8" max="3.0" step="0.1">
+                  <small>Higher values slow temperature drift and make pre-cooling more durable.</small>
+                </div>
               </div>
-              <input id="flexShare" type="range" min="0" max="45" step="1">
-              <small>Defines the fraction of IT load that can move across the day.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>UPS efficiency</strong>
-                <span id="upsEfficiency-value"></span>
-              </div>
-              <input id="upsEfficiency" type="range" min="92" max="99.5" step="0.1">
-              <small>UPS losses are modeled as IT * (1 / efficiency - 1).</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Fan intensity</strong>
-                <span id="fanPowerRatio-value"></span>
-              </div>
-              <input id="fanPowerRatio" type="range" min="3" max="12" step="0.5">
-              <small>Design fan power as a percent of IT load before cubic fan scaling.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Chiller COP</strong>
-                <span id="chillerCop-value"></span>
-              </div>
-              <input id="chillerCop" type="range" min="2.5" max="7.0" step="0.1">
-              <small>Mechanical cooling electric power is thermal load divided by COP.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Economizer</strong>
-                <span id="economizerEffectiveness-value"></span>
-              </div>
-              <input id="economizerEffectiveness" type="range" min="0" max="85" step="1">
-              <small>Higher values let cool ambient air offset more chiller thermal load.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Nominal inlet target</strong>
-                <span id="inletTarget-value"></span>
-              </div>
-              <input id="inletTarget" type="range" min="22" max="27" step="0.2">
-              <small>Lower targets protect thermal margin but increase cooling power.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Pre-cooling bias</strong>
-                <span id="preCool-value"></span>
-              </div>
-              <input id="preCool" type="range" min="0" max="100" step="1">
-              <small>Shifts the inlet target downward during cheap or cool hours.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Thermal mass</strong>
-                <span id="thermalMass-value"></span>
-              </div>
-              <input id="thermalMass" type="range" min="0.8" max="3.0" step="0.1">
-              <small>Higher values slow temperature drift and make pre-cooling more durable.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Price spread</strong>
-                <span id="priceVolatility-value"></span>
-              </div>
-              <input id="priceVolatility" type="range" min="60" max="180" step="1">
-              <small>Expands the day-ahead spread that drives charging and discharge incentives.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Disturbance</strong>
-                <span id="disturbance-value"></span>
-              </div>
-              <input id="disturbance" type="range" min="0" max="100" step="1">
-              <small>Injects a one-hour PV miss, heat spike, and load jump into the lower layer.</small>
-            </div>
-            <div class="control">
-              <div class="control-head">
-                <strong>Zoom hour</strong>
-                <span id="selectedHour-value"></span>
-              </div>
-              <input id="selectedHour" type="range" min="0" max="23" step="1">
-              <small>Selects the one-hour lower-layer window shown in the tracking charts.</small>
             </div>
           </div>
         </section>
 
         <section>
+          <div class="section-tag">At-a-glance</div>
           <h2>Immediate Impact</h2>
           <div class="impact-grid" id="impact-grid"></div>
         </section>
@@ -667,6 +821,23 @@
           <div class="story-card">
             <strong>Model notes</strong>
             <span id="story-talking-points">Cooling power is computed from UPS losses, fan intensity, economizer relief, and chiller COP. The lower layer changes fan and chiller commands, not just battery trim.</span>
+          </div>
+          <div class="story-card">
+            <strong>Console summary</strong>
+            <div class="story-metric">
+              <div class="story-metric-row">
+                <strong>Upper horizon</strong>
+                <span>24 h at 15 min</span>
+              </div>
+              <div class="story-metric-row">
+                <strong>Lower horizon</strong>
+                <span>1 h at 5 min</span>
+              </div>
+              <div class="story-metric-row">
+                <strong>Control parameters</strong>
+                <span>14 active sliders</span>
+              </div>
+            </div>
           </div>
         </section>
 
