@@ -1,8 +1,8 @@
-# Loadwise interview demo notes
+# Learning demo notes
 
-## What this demo is
+## What this project is
 
-This is a self-contained browser demo for explaining a hierarchical MPC architecture for a data-center energy orchestration problem.
+This is a self-contained browser learning demo for explaining a hierarchical MPC architecture for a data-center energy orchestration problem.
 
 It is intentionally not a production controller.
 
@@ -14,9 +14,9 @@ It is a communication artifact that shows:
 - which constraints are hard versus soft
 - how I think about safety, fallback, and observability
 
-## What to say first
+## Short introduction
 
-"I built this as a simplified HMPC storyboard for a data center with PV, BESS, flexible compute, and cooling assets. The point is not that this browser page is the production optimizer. The point is that the control decomposition, timescales, objectives, and safeguards are the ones I would carry into a real system."
+"This is a simplified HMPC storyboard for a data center with PV, BESS, flexible compute, and cooling assets. The point is not that this browser page is the production optimizer. The point is that the control decomposition, timescales, objectives, and safeguards are the ones I would carry into a real system."
 
 ## The core architecture
 
@@ -61,33 +61,33 @@ Grounded in real-world assumptions:
 - battery reserve policy and dispatch logic
 - production concerns like rollback, drift, observability, and actuator constraints
 
-## Safe claims you can make
+## Safe claims to make
 
-- "I used synthetic signals because interview demos should emphasize architecture and reasoning, not pretend to be a certified live controller."
+- "I used synthetic signals because learning demos should emphasize architecture and reasoning, not pretend to be a certified live controller."
 - "In production I would replace the browser heuristics with a proper service in Python, probably with Pyomo, CVXPY, CasADi, or a similar stack depending on the formulation."
 - "I would want simulation, backtesting, and hardware-in-the-loop style validation before touching a real facility."
 - "The lower layer would be conservative by design and always able to give up economics to preserve thermal safety."
 - "The most important thing is the contract between layers and the fallback behavior when forecasts are wrong."
 
-## Strong interview moments
+## Good discussion prompts
 
-If they ask why pre-cooling matters:
+If someone asks why pre-cooling matters:
 
 - "Because thermal mass is a real storage medium. If energy is cheap at 04:00 and expensive at 18:00, pre-cooling lets us shift part of the cooling cost in time while staying within the recommended inlet range."
 
-If they ask why not use a single optimization:
+If someone asks why not use a single optimization:
 
 - "I would still decompose it. Even if the mathematics is unified, operations, validation, and failure handling are cleaner with a strategic layer and a tracking layer."
 
-If they ask what makes this production-grade:
+If someone asks what makes this production-grade:
 
 - "Not the exact optimizer in this file. Production-grade means monitored data pipelines, model versioning, simulation coverage, rollback, anomaly detection, reserve margins, and explainable control decisions."
 
-If they ask what the next step would be:
+If someone asks what the next step would be:
 
 - "I would formalize the asset models, define the state vector, turn the objectives and constraints into an explicit optimization problem, and build an offline replay environment with historical market and plant data."
 
-## Suggested demo flow
+## Suggested learning flow
 
 1. Start on `Baseline` and explain the two layers.
 2. Point at the 24-hour forecasts and explain what the upper layer sees.
@@ -96,7 +96,7 @@ If they ask what the next step would be:
 5. Switch to `Heat Wave` and show how the thermal target shifts earlier.
 6. Switch to `Grid Stress` and talk about reserve policy and battery trim.
 
-## References you can mention if they ask where the framing came from
+## References for the framing
 
 - SMARD market data: https://www.smard.de/en
 - EPEX 15-minute products: https://www.epexspot.com/en/15-minute-products-market-coupling

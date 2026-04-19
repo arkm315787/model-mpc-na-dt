@@ -1,14 +1,14 @@
 # Model MPC na dt
 
-Interactive interview demo for a hierarchical MPC concept applied to a data-center energy orchestration problem.
+Interactive learning demo for a hierarchical MPC concept applied to a data-center energy orchestration problem.
 
-The demo is intentionally lightweight:
+The project is intentionally lightweight:
 
 - single-file browser dashboard
 - synthetic but plausible energy, thermal, and workload signals
 - upper-layer economic MPC story over 24 hours
 - lower-layer tracking / thermal MPC story over 1 hour
-- sliders and preset scenarios for live walkthroughs
+- sliders and preset scenarios for exploration
 
 ## How to run
 
@@ -20,7 +20,7 @@ Open [index.html](C:/Users/arshah/Model-MPC-na-dt/index.html) in your browser.
 
 Double-click `open-demo.bat`.
 
-## What to show in the interview
+## What to explore
 
 1. Start with the architecture section and explain why the control problem is split into two layers.
 2. Use the forecast charts to explain what the upper controller sees.
@@ -31,14 +31,14 @@ Double-click `open-demo.bat`.
 ## Files
 
 - `index.html`: the self-contained interactive dashboard
-- `DEMO_NOTES.md`: your speaking notes and safe interview claims
+- `LEARNING_NOTES.md`: background notes and explanation prompts
 - `open-demo.bat`: opens the demo locally
 
 ## Notes
 
 This is not presented as a production controller.
 
-It is a demo artifact meant to communicate:
+It is a learning artifact meant to communicate:
 
 - system decomposition
 - objective design
