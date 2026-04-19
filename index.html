@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loadwise HMPC Demo</title>
+  <title>Model MPC na dt</title>
   <style>
     :root {
-      --bg: #0f1720;
-      --bg-soft: #14202c;
-      --panel: rgba(18, 30, 42, 0.86);
-      --panel-strong: rgba(11, 20, 29, 0.92);
-      --line: rgba(255, 255, 255, 0.08);
-      --line-strong: rgba(255, 255, 255, 0.18);
-      --text: #eef4f7;
-      --muted: #a9b8c4;
-      --teal: #4ecdc4;
-      --cyan: #83c5ff;
-      --amber: #f6bd60;
-      --orange: #ff8a5b;
-      --green: #77dd77;
-      --red: #ff6b6b;
-      --ink: #07111a;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      --bg: #f6f1e8;
+      --bg-soft: #efe6d8;
+      --panel: rgba(255, 251, 245, 0.92);
+      --panel-strong: rgba(255, 255, 255, 0.96);
+      --line: rgba(53, 63, 77, 0.12);
+      --line-strong: rgba(53, 63, 77, 0.22);
+      --text: #17212b;
+      --muted: #596677;
+      --teal: #117a72;
+      --blue: #2563eb;
+      --amber: #b7791f;
+      --orange: #c56b3b;
+      --green: #2f855a;
+      --red: #c24141;
+      --cream: #fffaf3;
+      --shadow: 0 18px 48px rgba(64, 45, 24, 0.12);
     }
 
     * {
@@ -32,18 +32,18 @@
       margin: 0;
       min-height: 100vh;
       font-family: Aptos, "Segoe UI", "Trebuchet MS", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(78, 205, 196, 0.16), transparent 28%),
-        radial-gradient(circle at top right, rgba(246, 189, 96, 0.18), transparent 26%),
-        linear-gradient(180deg, #0c131a 0%, #101923 45%, #0b1117 100%);
       color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(17, 122, 114, 0.12), transparent 26%),
+        radial-gradient(circle at top right, rgba(183, 121, 31, 0.14), transparent 24%),
+        linear-gradient(180deg, #f8f4ec 0%, #f4eee4 46%, #efe5d7 100%);
     }
 
     .page {
-      width: min(1480px, calc(100vw - 32px));
-      margin: 18px auto 28px;
+      width: min(1420px, calc(100vw - 28px));
+      margin: 16px auto 26px;
       display: grid;
-      gap: 16px;
+      gap: 14px;
     }
 
     .panel {
@@ -51,155 +51,182 @@
       border: 1px solid var(--line);
       border-radius: 22px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+      backdrop-filter: blur(14px);
     }
 
     .hero {
-      padding: 28px 30px;
+      padding: 24px 26px;
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
       align-items: end;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(130deg, rgba(78, 205, 196, 0.08), transparent 40%),
-        linear-gradient(315deg, rgba(246, 189, 96, 0.08), transparent 40%);
-      pointer-events: none;
     }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
       color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      font-size: 0.78rem;
       margin-bottom: 10px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2rem, 4vw, 3.3rem);
+      font-size: clamp(1.9rem, 4vw, 3rem);
       line-height: 0.98;
       letter-spacing: -0.04em;
       max-width: 12ch;
     }
 
     .hero p {
-      margin: 12px 0 0;
+      margin: 10px 0 0;
       color: var(--muted);
-      max-width: 72ch;
-      line-height: 1.55;
+      max-width: 64ch;
+      line-height: 1.5;
     }
 
-    .hero-metrics {
+    .hero-chips {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      z-index: 1;
+      gap: 10px;
     }
 
-    .metric-pill {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+    .chip {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(23, 33, 43, 0.07);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .chip strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .chip span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+
+    .contract {
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .contract-box {
+      border: 1px solid var(--line);
       border-radius: 18px;
       padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.62);
     }
 
-    .metric-pill strong {
+    .contract-box strong {
       display: block;
-      font-size: 1.35rem;
-      margin-bottom: 2px;
+      font-size: 0.96rem;
+      margin-bottom: 4px;
+    }
+
+    .contract-box span {
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+
+    .contract-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(23, 33, 43, 0.4);
+      font-size: 1.6rem;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 350px minmax(0, 1fr);
-      gap: 16px;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 14px;
       align-items: start;
     }
 
-    .controls {
-      padding: 22px 20px;
+    .sidebar {
+      padding: 18px;
       position: sticky;
-      top: 18px;
+      top: 16px;
+      display: grid;
+      gap: 14px;
     }
 
-    .controls h2,
-    .main-stack h2 {
+    .sidebar h2,
+    .main h2 {
       margin: 0 0 8px;
-      font-size: 1.05rem;
+      font-size: 1rem;
       letter-spacing: 0.02em;
     }
 
     .subtle {
       color: var(--muted);
-      line-height: 1.5;
-      font-size: 0.94rem;
+      font-size: 0.9rem;
+      line-height: 1.45;
     }
 
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin: 16px 0 18px;
+      margin-top: 12px;
     }
 
     .preset-btn {
       appearance: none;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--text);
-      padding: 12px 12px;
       border-radius: 14px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--text);
       text-align: left;
       cursor: pointer;
-      transition: 180ms ease;
+      transition: 160ms ease;
     }
 
     .preset-btn:hover,
     .preset-btn.active {
+      border-color: rgba(17, 122, 114, 0.45);
+      background: rgba(17, 122, 114, 0.08);
       transform: translateY(-1px);
-      border-color: rgba(78, 205, 196, 0.5);
-      background: rgba(78, 205, 196, 0.1);
     }
 
     .preset-btn span {
       display: block;
-      font-size: 0.78rem;
       color: var(--muted);
-      margin-top: 4px;
+      font-size: 0.75rem;
+      margin-top: 3px;
       line-height: 1.35;
     }
 
-    .control-list {
+    .controls-grid {
       display: grid;
-      gap: 14px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 12px;
     }
 
     .control {
-      padding: 14px 14px 12px;
+      padding: 11px 12px 10px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(23, 33, 43, 0.08);
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .control-head {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      gap: 14px;
+      gap: 12px;
       margin-bottom: 8px;
-      font-size: 0.93rem;
+      font-size: 0.89rem;
     }
 
     .control-head strong {
@@ -208,15 +235,8 @@
 
     .control-head span {
       color: var(--teal);
+      font-size: 0.8rem;
       font-family: "Cascadia Mono", Consolas, monospace;
-      font-size: 0.82rem;
-    }
-
-    .control small {
-      display: block;
-      color: var(--muted);
-      margin-top: 7px;
-      line-height: 1.45;
     }
 
     input[type="range"] {
@@ -224,122 +244,92 @@
       accent-color: var(--amber);
     }
 
-    .side-note,
-    .scenario-card,
-    .architecture,
-    .safety-card,
-    .talk-card {
-      padding: 20px 22px;
-    }
-
-    .main-stack {
+    .impact-grid {
       display: grid;
-      gap: 16px;
+      gap: 9px;
+      margin-top: 10px;
     }
 
-    .top-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 16px;
+    .impact-item {
+      padding: 11px 12px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(23, 33, 43, 0.08);
     }
 
-    .architecture-flow {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr;
-      gap: 10px;
-      margin-top: 16px;
-      align-items: stretch;
-    }
-
-    .flow-box {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      min-height: 176px;
-    }
-
-    .flow-box h3 {
-      margin: 0 0 8px;
+    .impact-item strong {
+      display: block;
       font-size: 1rem;
+      margin-bottom: 2px;
     }
 
-    .flow-box p,
-    .flow-box li,
-    .scenario-card li,
-    .safety-card li,
-    .talk-card li {
+    .impact-item span {
       color: var(--muted);
-      line-height: 1.45;
-      font-size: 0.92rem;
+      font-size: 0.8rem;
+      line-height: 1.35;
     }
 
-    .flow-box ul,
-    .scenario-card ul,
-    .safety-card ul,
-    .talk-card ul {
-      margin: 10px 0 0;
-      padding-left: 18px;
+    .main {
+      display: grid;
+      gap: 14px;
     }
 
-    .arrow {
-      display: flex;
-      align-items: center;
-      font-size: 2rem;
-      color: rgba(255, 255, 255, 0.42);
+    .story {
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
-    .scenario-card {
-      position: relative;
-      overflow: hidden;
+    .story-card {
+      padding: 14px 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(23, 33, 43, 0.08);
+      background: rgba(255, 255, 255, 0.58);
     }
 
-    .scenario-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 90% 0%, rgba(255, 138, 91, 0.14), transparent 36%),
-        radial-gradient(circle at 0% 100%, rgba(131, 197, 255, 0.12), transparent 34%);
-      pointer-events: none;
-    }
-
-    .scenario-badge {
+    .story-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 7px 12px;
+      padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--amber);
-      font-size: 0.79rem;
-      letter-spacing: 0.04em;
+      background: rgba(17, 122, 114, 0.08);
+      color: var(--teal);
+      font-size: 0.74rem;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
     }
 
-    .scenario-card h3,
-    .talk-card h3,
-    .safety-card h3 {
-      margin: 12px 0 8px;
-      font-size: 1.1rem;
+    .story-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .story-card span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.42;
     }
 
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
     }
 
     .kpi {
-      padding: 16px 16px 14px;
+      padding: 14px 15px;
       border-radius: 18px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(23, 33, 43, 0.08);
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .kpi strong {
       display: block;
-      font-size: 1.46rem;
+      font-size: 1.35rem;
       line-height: 1;
       margin-bottom: 6px;
     }
@@ -347,12 +337,12 @@
     .kpi span {
       display: block;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       margin-bottom: 8px;
     }
 
     .delta {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-family: "Cascadia Mono", Consolas, monospace;
     }
 
@@ -371,44 +361,48 @@
     .chart-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      padding: 18px;
+      gap: 12px;
     }
 
     .chart-card {
+      padding: 14px 15px 12px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.02));
-      padding: 14px 16px 12px;
+      border: 1px solid rgba(23, 33, 43, 0.08);
+      background: var(--panel-strong);
     }
 
-    .chart-card h3 {
+    .chart-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .chart-title h3 {
       margin: 0;
-      font-size: 0.99rem;
-      letter-spacing: 0.01em;
+      font-size: 0.98rem;
     }
 
-    .chart-card p {
-      margin: 6px 0 10px;
+    .chart-title span {
       color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.45;
+      font-size: 0.78rem;
     }
 
     .legend {
       display: flex;
       flex-wrap: wrap;
       gap: 10px 14px;
+      min-height: 22px;
       margin-bottom: 8px;
-      min-height: 24px;
     }
 
     .legend-item {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       color: var(--muted);
-      font-size: 0.8rem;
+      font-size: 0.79rem;
     }
 
     .swatch {
@@ -420,70 +414,22 @@
 
     svg.chart {
       width: 100%;
-      height: 280px;
+      height: 278px;
       display: block;
-      border-radius: 14px;
+      border-radius: 15px;
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.01)),
-        rgba(7, 17, 26, 0.58);
+        linear-gradient(180deg, rgba(248, 244, 237, 0.96), rgba(255, 255, 255, 0.92)),
+        #fffdf9;
     }
 
-    .bottom-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .footer-note {
-      padding: 18px 22px;
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 18px;
-    }
-
-    .footer-note a {
-      color: var(--cyan);
-      text-decoration: none;
-    }
-
-    .footer-note a:hover {
-      text-decoration: underline;
-    }
-
-    .mini-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .mini-item {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .mini-item strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 0.95rem;
-    }
-
-    .mini-item span {
-      color: var(--muted);
-      font-size: 0.86rem;
-      line-height: 1.4;
-    }
-
-    @media (max-width: 1250px) {
-      .layout,
-      .top-row,
-      .bottom-row,
-      .footer-note,
-      .hero {
+    @media (max-width: 1220px) {
+      .hero,
+      .story,
+      .layout {
         grid-template-columns: 1fr;
       }
 
-      .controls {
+      .sidebar {
         position: static;
       }
 
@@ -491,37 +437,32 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      .architecture-flow {
+      .contract {
         grid-template-columns: 1fr;
       }
 
-      .arrow {
-        justify-content: center;
+      .contract-arrow {
         transform: rotate(90deg);
       }
     }
 
-    @media (max-width: 840px) {
-      .chart-grid,
-      .kpi-grid,
-      .preset-grid,
-      .hero-metrics {
-        grid-template-columns: 1fr;
-      }
-
+    @media (max-width: 860px) {
       .page {
-        width: min(100vw - 18px, 100%);
-        margin: 9px auto 18px;
+        width: min(100vw - 16px, 100%);
+        margin: 8px auto 16px;
       }
 
       .hero,
-      .controls,
-      .architecture,
-      .scenario-card,
-      .safety-card,
-      .talk-card,
-      .footer-note {
-        padding: 18px;
+      .sidebar,
+      .story {
+        padding: 16px;
+      }
+
+      .hero-chips,
+      .preset-grid,
+      .chart-grid,
+      .kpi-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -530,309 +471,222 @@
   <div class="page">
     <section class="hero panel">
       <div>
-        <div class="eyebrow">Hierarchical MPC demo for Loadwise interview</div>
-        <h1>Economics upstairs. Safety downstairs.</h1>
+        <div class="eyebrow">Interactive HMPC interview demo</div>
+        <h1>Upper layer plans. Lower layer protects.</h1>
         <p>
-          This browser demo shows how a two-layer controller could coordinate a data center with PV, BESS, flexible compute,
-          and cooling assets against volatile German power prices and thermal limits. The data are synthetic, but the structure,
-          constraints, and timing are chosen to be interview-grade and easy to explain live.
+          A compact browser dashboard for a data center with PV, BESS, flexible compute, and cooling.
+          The data are synthetic, but the two-layer control contract, timings, and tradeoffs are the point.
         </p>
       </div>
-      <div class="hero-metrics">
-        <div class="metric-pill">
+      <div class="hero-chips">
+        <div class="chip">
           <strong>24 h / 15 min</strong>
-          <span class="subtle">Upper layer economic horizon</span>
+          <span>Economic MPC for cost, load shifting, and battery targeting</span>
         </div>
-        <div class="metric-pill">
+        <div class="chip">
           <strong>60 min / 5 min</strong>
-          <span class="subtle">Lower layer tracking horizon</span>
+          <span>Tracking MPC for thermal safety and grid target correction</span>
         </div>
-        <div class="metric-pill">
+        <div class="chip">
           <strong>Assets</strong>
-          <span class="subtle">PV, BESS, flexible compute, cooling plant</span>
+          <span>PV, battery, flexible jobs, fans, chillers</span>
         </div>
-        <div class="metric-pill">
-          <strong>Hard guardrails</strong>
-          <span class="subtle">ASHRAE envelope, SOC reserve, rollback mode</span>
+        <div class="chip">
+          <strong>Hard limits</strong>
+          <span>Thermal line, battery reserve, actuator bounds</span>
         </div>
       </div>
     </section>
 
+    <section class="contract panel">
+      <div class="contract-box">
+        <strong>Forecasts</strong>
+        <span>Price, PV, ambient, base IT load</span>
+      </div>
+      <div class="contract-arrow">></div>
+      <div class="contract-box">
+        <strong>Upper MPC</strong>
+        <span>Grid target, workload shift, thermal target, battery plan</span>
+      </div>
+      <div class="contract-arrow">></div>
+      <div class="contract-box">
+        <strong>Lower MPC</strong>
+        <span>Fan, chiller, battery trim to stay safe and track plan</span>
+      </div>
+    </section>
+
     <section class="layout">
-      <aside class="controls panel">
-        <h2>Scenario Controls</h2>
-        <p class="subtle">
-          Pick a storyline, then move the sliders while you talk. The upper layer will replan the day and the lower layer
-          will re-simulate one selected real-time hour with forecast error.
-        </p>
+      <aside class="sidebar panel">
+        <section>
+          <h2>Scenario</h2>
+          <div class="subtle">PV, flex load, and pre-cooling reshape the upper plan. Disturbance and battery power reshape the lower layer.</div>
+          <div class="preset-grid" id="preset-grid"></div>
+        </section>
 
-        <div class="preset-grid" id="preset-grid"></div>
-
-        <div class="control-list">
-          <div class="control">
-            <div class="control-head">
-              <strong>PV peak capacity</strong>
-              <span id="pvPeak-value"></span>
+        <section>
+          <h2>Tune Inputs</h2>
+          <div class="controls-grid">
+            <div class="control">
+              <div class="control-head">
+                <strong>PV peak</strong>
+                <span id="pvPeak-value"></span>
+              </div>
+              <input id="pvPeak" type="range" min="2" max="12" step="0.5">
             </div>
-            <input id="pvPeak" type="range" min="2" max="12" step="0.5">
-            <small>Bigger solar troughs give the upper MPC more incentive to charge the battery and move flexible workloads.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>BESS energy</strong>
-              <span id="bessEnergy-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>BESS energy</strong>
+                <span id="bessEnergy-value"></span>
+              </div>
+              <input id="bessEnergy" type="range" min="4" max="30" step="0.5">
             </div>
-            <input id="bessEnergy" type="range" min="4" max="30" step="0.5">
-            <small>This changes how much energy can be shifted from cheap midday hours into the evening scarcity window.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>BESS power</strong>
-              <span id="bessPower-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>BESS power</strong>
+                <span id="bessPower-value"></span>
+              </div>
+              <input id="bessPower" type="range" min="1" max="10" step="0.25">
             </div>
-            <input id="bessPower" type="range" min="1" max="10" step="0.25">
-            <small>This changes ramping and the lower layer's ability to trim grid import when reality deviates from plan.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>Flexible workload share</strong>
-              <span id="flexShare-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>Flexible load</strong>
+                <span id="flexShare-value"></span>
+              </div>
+              <input id="flexShare" type="range" min="0" max="45" step="1">
             </div>
-            <input id="flexShare" type="range" min="0" max="45" step="1">
-            <small>Represents jobs that can be shifted within the day without breaking SLAs, such as AI training or non-urgent batch work.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>Pre-cooling aggressiveness</strong>
-              <span id="preCool-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>Pre-cooling</strong>
+                <span id="preCool-value"></span>
+              </div>
+              <input id="preCool" type="range" min="0" max="100" step="1">
             </div>
-            <input id="preCool" type="range" min="0" max="100" step="1">
-            <small>Higher values let the economic MPC spend cheap energy early to build a thermal buffer before expensive hot hours.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>Carbon weighting</strong>
-              <span id="carbonWeight-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>Price spread</strong>
+                <span id="priceVolatility-value"></span>
+              </div>
+              <input id="priceVolatility" type="range" min="60" max="180" step="1">
             </div>
-            <input id="carbonWeight" type="range" min="0" max="100" step="1">
-            <small>Moves the objective from pure arbitrage toward carbon-aware scheduling without changing the lower-layer safety logic.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>Price volatility</strong>
-              <span id="priceVolatility-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>Disturbance</strong>
+                <span id="disturbance-value"></span>
+              </div>
+              <input id="disturbance" type="range" min="0" max="100" step="1">
             </div>
-            <input id="priceVolatility" type="range" min="60" max="180" step="1">
-            <small>Use this to show why the strategic layer needs forecast-driven planning instead of local myopic control.</small>
-          </div>
-
-          <div class="control">
-            <div class="control-head">
-              <strong>Forecast error / disturbance</strong>
-              <span id="disturbance-value"></span>
+            <div class="control">
+              <div class="control-head">
+                <strong>Zoom hour</strong>
+                <span id="selectedHour-value"></span>
+              </div>
+              <input id="selectedHour" type="range" min="0" max="23" step="1">
             </div>
-            <input id="disturbance" type="range" min="0" max="100" step="1">
-            <small>This injects an intrahour PV miss, IT load bump, and thermal disturbance for the lower controller to absorb safely.</small>
           </div>
+        </section>
 
-          <div class="control">
-            <div class="control-head">
-              <strong>Lower-layer zoom hour</strong>
-              <span id="selectedHour-value"></span>
-            </div>
-            <input id="selectedHour" type="range" min="0" max="23" step="1">
-            <small>Pick the hour you want to narrate live, such as 13:00 for solar oversupply or 19:00 for evening scarcity.</small>
-          </div>
-        </div>
-
-        <div class="side-note panel" style="margin-top:16px;">
-          <h2>How to Present It</h2>
-          <p class="subtle" id="demo-summary">
-            The upper layer plans the day. The lower layer handles reality.
-          </p>
-        </div>
+        <section>
+          <h2>Immediate Impact</h2>
+          <div class="impact-grid" id="impact-grid"></div>
+        </section>
       </aside>
 
-      <div class="main-stack">
-        <section class="top-row">
-          <div class="architecture panel">
-            <h2>Architecture Story</h2>
-            <p class="subtle">
-              This is the core interview point: different timescales, different objectives, one clean control contract between them.
-            </p>
-
-            <div class="architecture-flow">
-              <div class="flow-box">
-                <h3>Signals and Forecasts</h3>
-                <ul>
-                  <li>Day-ahead price and carbon forecasts</li>
-                  <li>Ambient weather and PV forecast</li>
-                  <li>Compute demand and flexibility envelope</li>
-                  <li>Asset state: SOC, thermal state, reserves</li>
-                </ul>
-              </div>
-              <div class="arrow">></div>
-              <div class="flow-box">
-                <h3>Upper Layer Economic MPC</h3>
-                <ul>
-                  <li>Horizon: 24 hours</li>
-                  <li>Step: 15 minutes</li>
-                  <li>Objective: cost + carbon + degradation + SLA risk</li>
-                  <li>Outputs: grid target, SOC trajectory, thermal buffer target</li>
-                </ul>
-              </div>
-              <div class="arrow">></div>
-              <div class="flow-box">
-                <h3>Lower Layer Tracking MPC</h3>
-                <ul>
-                  <li>Horizon: 60 minutes</li>
-                  <li>Step: 5 minutes</li>
-                  <li>Objective: track plan while enforcing thermal safety</li>
-                  <li>Outputs: fan, chiller, battery trim, alarm / rollback</li>
-                </ul>
-              </div>
-            </div>
+      <main class="main">
+        <section class="story panel">
+          <div class="story-card">
+            <div class="story-badge" id="scenario-badge">Baseline</div>
+            <strong id="story-title">Balanced spring day</strong>
+            <span id="story-text">Charge near midday, preserve energy for the evening ramp, then let the lower layer absorb the live miss.</span>
           </div>
-
-          <div class="scenario-card panel">
-            <div class="scenario-badge" id="scenario-badge">Baseline scenario</div>
-            <h3 id="scenario-title">Sunny day with an evening price spike</h3>
-            <p class="subtle" id="scenario-text">
-              The controller charges the battery around the solar trough, pre-cools before the heat peak, and discharges into the evening scarcity window.
-            </p>
-            <ul id="scenario-list">
-              <li>Upper layer target: move cost and carbon away from the evening ramp.</li>
-              <li>Lower layer target: hold inlet temperature within the recommended envelope while tracking the grid setpoint.</li>
-              <li>Demo point: show how forecast error triggers fast actuator correction without re-solving the full day plan.</li>
-            </ul>
+          <div class="story-card">
+            <strong>Live narration</strong>
+            <span id="story-talking-points">Best charge window around 13:00. Best discharge window around 19:00. Tracking layer currently focused on 18:00.</span>
           </div>
         </section>
 
         <section class="kpi-grid" id="kpi-grid"></section>
 
-        <section class="panel chart-grid">
+        <section class="chart-grid">
           <div class="chart-card">
-            <h3>Forecast Layer: Market and Carbon Signals</h3>
-            <p>These are the slow signals the upper controller uses when it decides whether to charge, shift compute, or pre-cool.</p>
-            <div class="legend" id="legend-market"></div>
-            <svg class="chart" id="chart-market"></svg>
+            <div class="chart-title">
+              <h3>Economic inputs</h3>
+              <span>price plus schedulable load</span>
+            </div>
+            <div class="legend" id="legend-inputs"></div>
+            <svg class="chart" id="chart-inputs"></svg>
           </div>
 
           <div class="chart-card">
-            <h3>Forecast Layer: Facility and Weather</h3>
-            <p>PV, IT load, and ambient temperature define the opportunity set and the cooling burden across the day.</p>
-            <div class="legend" id="legend-facility"></div>
-            <svg class="chart" id="chart-facility"></svg>
-          </div>
-
-          <div class="chart-card">
-            <h3>Upper Layer Outputs</h3>
-            <p>Strategic targets over 24 hours: grid exchange, battery schedule, and the thermal buffering plan.</p>
+            <div class="chart-title">
+              <h3>Upper-layer plan</h3>
+              <span>grid, battery, thermal target</span>
+            </div>
             <div class="legend" id="legend-upper"></div>
             <svg class="chart" id="chart-upper"></svg>
           </div>
 
           <div class="chart-card">
-            <h3>Lower Layer: Real-Time Tracking at <span id="zoom-hour-label">18:00</span></h3>
-            <p>The disturbance is injected only here: actual PV drops, load moves, and the lower controller catches the error.</p>
+            <div class="chart-title">
+              <h3>Lower-layer tracking</h3>
+              <span id="zoom-label">18:00 to 19:00</span>
+            </div>
             <div class="legend" id="legend-lower"></div>
             <svg class="chart" id="chart-lower"></svg>
           </div>
-        </section>
 
-        <section class="bottom-row">
-          <div class="safety-card panel">
-            <h2>What Makes This Production-Minded</h2>
-            <div class="mini-list" id="safety-list"></div>
-          </div>
-
-          <div class="talk-card panel">
-            <h2>Suggested Talk Track</h2>
-            <h3>What to say in 90 seconds</h3>
-            <ul>
-              <li>"I separated the problem because economics and actuator safety live on different timescales."</li>
-              <li>"The upper MPC reasons over 24 hours with market, weather, PV, and workload forecasts."</li>
-              <li>"The lower controller does not try to beat the market. It protects the plant while tracking the strategic plan."</li>
-              <li>"The hard constraints are thermal envelope, battery reserve, ramp limits, and rollback to a rule-based safe mode."</li>
-              <li>"In production I would swap these browser heuristics for a proper optimization service, but the interfaces would stay almost the same."</li>
-            </ul>
+          <div class="chart-card">
+            <div class="chart-title">
+              <h3>Lower-layer actuators</h3>
+              <span>battery trim and cooling response</span>
+            </div>
+            <div class="legend" id="legend-actuator"></div>
+            <svg class="chart" id="chart-actuator"></svg>
           </div>
         </section>
-
-        <section class="footer-note panel">
-          <div>
-            <h2>Demo Assumptions</h2>
-            <p class="subtle">
-              The signals here are synthetic, but the framing is grounded in real operating assumptions: quarter-hour market resolution,
-              volatile German wholesale prices, and a thermal envelope consistent with common data-center guidance. This is the right level
-              for an interview demo because it shows architectural judgment, control intuition, and production thinking without pretending
-              to be a certified controller.
-            </p>
-          </div>
-          <div>
-            <h2>Reference Anchors</h2>
-            <p class="subtle">
-              Official source links you can mention if asked:
-              <br>
-              <a href="https://www.smard.de/en" target="_blank" rel="noreferrer">SMARD market data (Germany)</a>
-              <br>
-              <a href="https://www.epexspot.com/en/15-minute-products-market-coupling" target="_blank" rel="noreferrer">EPEX SPOT 15-minute market coupling</a>
-              <br>
-              <a href="https://handbook.ashrae.org/Handbooks/A19/IP/a19_ch20/a19_ch20_ip.aspx" target="_blank" rel="noreferrer">ASHRAE data-center thermal guidance</a>
-            </p>
-          </div>
-        </section>
-      </div>
+      </main>
     </section>
   </div>
 
   <script>
     const COLORS = {
-      price: "#f6bd60",
-      carbon: "#ff8a5b",
-      pv: "#77dd77",
-      it: "#83c5ff",
-      ambient: "#d9f0ff",
-      grid: "#4ecdc4",
-      battery: "#f28482",
-      soc: "#ffd166",
-      temp: "#4ecdc4",
-      tempTarget: "#f6bd60",
-      fan: "#83c5ff",
-      chiller: "#ff8a5b",
-      actual: "#eef4f7"
+      price: "#b7791f",
+      baseLoad: "#8ea0b5",
+      scheduledLoad: "#2563eb",
+      pv: "#2f855a",
+      grid: "#117a72",
+      battery: "#c56b3b",
+      tempTarget: "#7c5a16",
+      actualGrid: "#17212b",
+      tempActual: "#117a72",
+      hardLine: "#c24141",
+      trim: "#c56b3b",
+      fan: "#2563eb",
+      chiller: "#8d5cf6"
     };
 
     const sliderMeta = {
-      pvPeak: { label: "MW", format: (v) => `${v.toFixed(1)} MW` },
-      bessEnergy: { label: "MWh", format: (v) => `${v.toFixed(1)} MWh` },
-      bessPower: { label: "MW", format: (v) => `${v.toFixed(2)} MW` },
-      flexShare: { label: "%", format: (v) => `${v.toFixed(0)}%` },
-      preCool: { label: "%", format: (v) => `${v.toFixed(0)}%` },
-      carbonWeight: { label: "%", format: (v) => `${v.toFixed(0)}%` },
-      priceVolatility: { label: "%", format: (v) => `${v.toFixed(0)}%` },
-      disturbance: { label: "%", format: (v) => `${v.toFixed(0)}%` },
-      selectedHour: { label: "hour", format: (v) => `${String(v).padStart(2, "0")}:00` }
+      pvPeak: { format: (v) => `${v.toFixed(1)} MW` },
+      bessEnergy: { format: (v) => `${v.toFixed(1)} MWh` },
+      bessPower: { format: (v) => `${v.toFixed(2)} MW` },
+      flexShare: { format: (v) => `${v.toFixed(0)}%` },
+      preCool: { format: (v) => `${v.toFixed(0)}%` },
+      priceVolatility: { format: (v) => `${v.toFixed(0)}%` },
+      disturbance: { format: (v) => `${v.toFixed(0)}%` },
+      selectedHour: { format: (v) => `${String(v).padStart(2, "0")}:00` }
     };
 
     const presets = {
       baseline: {
-        title: "Sunny day with a steep evening ramp",
         short: "Baseline",
-        description: "Balanced operating day with a normal solar trough and evening scarcity peak.",
+        description: "Balanced day",
+        title: "Balanced spring day",
+        note: "Charge around midday, keep evening reserve, and let the lower layer absorb a moderate miss.",
         values: {
           pvPeak: 6.5,
           bessEnergy: 12.0,
           bessPower: 4.0,
           flexShare: 18,
-          preCool: 55,
-          carbonWeight: 35,
+          preCool: 52,
           priceVolatility: 100,
           disturbance: 30,
           selectedHour: 18
@@ -841,81 +695,73 @@
           ambientBias: 0,
           cloudFactor: 1.0,
           priceShock: 0,
-          carbonBias: 0,
-          loadBias: 0.0,
-          event: "Moderate spring weather, normal evening ramp, and enough solar to create a midday charging opportunity."
+          loadBias: 0.0
         }
       },
       solar: {
-        title: "Solar glut and negative midday prices",
         short: "Solar Glut",
-        description: "Use this to show charging, export control, and aggressive workload shifting into the solar window.",
+        description: "Deep midday trough",
+        title: "High solar and low midday prices",
+        note: "This scenario makes flexible load shifting and battery charging visibly stronger around the solar window.",
         values: {
           pvPeak: 9.5,
           bessEnergy: 14.0,
           bessPower: 5.0,
-          flexShare: 24,
-          preCool: 65,
-          carbonWeight: 50,
-          priceVolatility: 115,
+          flexShare: 25,
+          preCool: 58,
+          priceVolatility: 118,
           disturbance: 22,
           selectedHour: 13
         },
         meta: {
           ambientBias: -1,
           cloudFactor: 1.12,
-          priceShock: -10,
-          carbonBias: -35,
-          loadBias: 0.2,
-          event: "High PV output creates a strong midday trough; the planner soaks it up with BESS, thermal storage, and flexible compute."
+          priceShock: -8,
+          loadBias: 0.15
         }
       },
       heat: {
-        title: "Heat wave with thermal stress",
         short: "Heat Wave",
-        description: "Best for talking about thermal buffering, constraint handling, and why pre-cooling is not an afterthought.",
+        description: "Thermal stress",
+        title: "Hot day with expensive cooling",
+        note: "Pre-cooling becomes more valuable and the lower layer uses more fan and chiller authority to stay inside the thermal line.",
         values: {
           pvPeak: 6.0,
           bessEnergy: 12.0,
           bessPower: 4.0,
-          flexShare: 15,
+          flexShare: 14,
           preCool: 88,
-          carbonWeight: 40,
           priceVolatility: 120,
-          disturbance: 42,
+          disturbance: 45,
           selectedHour: 16
         },
         meta: {
           ambientBias: 6,
           cloudFactor: 0.95,
-          priceShock: 20,
-          carbonBias: 45,
-          loadBias: 0.55,
-          event: "Hot ambient conditions increase cooling energy and make the thermal buffer visibly valuable."
+          priceShock: 16,
+          loadBias: 0.55
         }
       },
       stress: {
-        title: "Grid stress and expensive evening scarcity",
         short: "Grid Stress",
-        description: "Best for talking about dispatch, reserve policy, and the difference between day-ahead planning and intraday correction.",
+        description: "Steep evening ramp",
+        title: "Scarcity pricing in the evening ramp",
+        note: "The upper layer tries to arrive full into the evening, and the lower layer leans harder on battery trim when the plant deviates.",
         values: {
           pvPeak: 5.5,
           bessEnergy: 16.0,
           bessPower: 5.5,
           flexShare: 22,
           preCool: 60,
-          carbonWeight: 28,
-          priceVolatility: 145,
+          priceVolatility: 148,
           disturbance: 55,
           selectedHour: 19
         },
         meta: {
           ambientBias: 2,
           cloudFactor: 0.88,
-          priceShock: 38,
-          carbonBias: 85,
-          loadBias: 0.75,
-          event: "Scarcity pricing makes the strategic battery target and the lower-layer battery trim both easy to explain."
+          priceShock: 35,
+          loadBias: 0.75
         }
       }
     };
@@ -957,35 +803,369 @@
       return sorted[lo] * (1 - frac) + sorted[hi] * frac;
     }
 
-    function formatSigned(value, decimals = 1, suffix = "") {
-      const sign = value > 0 ? "+" : "";
-      return `${sign}${value.toFixed(decimals)}${suffix}`;
-    }
-
-    function humanMoney(value) {
-      return `EUR ${value.toFixed(0)}`;
-    }
-
     function normalise(values) {
       const lo = min(values);
       const hi = max(values);
-      const spread = hi - lo || 1;
-      return values.map((v) => (v - lo) / spread);
+      const span = hi - lo || 1;
+      return values.map((value) => (value - lo) / span);
+    }
+
+    function humanMoney(value) {
+      const sign = value > 0 ? "+" : "";
+      return `${sign}EUR ${Math.abs(value).toFixed(0)}`;
+    }
+
+    function allocateFlexibleLoad(baseLoad, flexFraction, weights, dt) {
+      const fixed = baseLoad.map((value) => value * (1 - flexFraction));
+      const totalFlexEnergy = sum(baseLoad.map((value) => value * flexFraction * dt));
+      const maxFlexPerStep = baseLoad.map((value) => value * flexFraction * 2.2 + 0.18);
+      const flexPower = new Array(baseLoad.length).fill(0);
+      let remaining = totalFlexEnergy;
+      let active = new Set(baseLoad.map((_, index) => index));
+
+      for (let iter = 0; iter < 16 && remaining > 1e-6 && active.size > 0; iter += 1) {
+        let totalWeight = 0;
+        active.forEach((index) => {
+          totalWeight += weights[index];
+        });
+
+        let leftover = 0;
+        const next = new Set();
+        active.forEach((index) => {
+          const share = remaining * (weights[index] / (totalWeight || 1));
+          const availableEnergy = Math.max(0, maxFlexPerStep[index] * dt - flexPower[index] * dt);
+          const add = Math.min(share, availableEnergy);
+          flexPower[index] += add / dt;
+          leftover += share - add;
+          if (availableEnergy - add > 1e-6) {
+            next.add(index);
+          }
+        });
+        remaining = leftover;
+        active = next;
+      }
+
+      if (remaining > 1e-6) {
+        const even = remaining / (baseLoad.length * dt);
+        for (let i = 0; i < flexPower.length; i += 1) {
+          flexPower[i] += even;
+        }
+      }
+
+      return fixed.map((value, index) => value + flexPower[index]);
+    }
+
+    function interpolateSeries(series, hour) {
+      const step = 0.25;
+      const pos = clamp(hour / step, 0, series.length - 1);
+      const lo = Math.floor(pos);
+      const hi = Math.min(series.length - 1, lo + 1);
+      const frac = pos - lo;
+      return series[lo] * (1 - frac) + series[hi] * frac;
+    }
+
+    function simulateDay(params, meta, optimize) {
+      const dt = 0.25;
+      const points = 96;
+      const hours = Array.from({ length: points }, (_, index) => index * dt);
+      const volatility = params.priceVolatility / 100;
+
+      const pv = hours.map((hour) => {
+        const daylight = Math.max(0, Math.sin((Math.PI * (hour - 6)) / 12));
+        const shape = daylight ** 1.7;
+        const ripple = 1 - 0.05 * Math.sin(hour * 1.8) - 0.03 * Math.cos(hour * 0.95);
+        return Math.max(0, params.pvPeak * meta.cloudFactor * shape * ripple);
+      });
+
+      const ambient = hours.map((hour) => {
+        return 18.2 + meta.ambientBias
+          + 5.0 * Math.sin(((hour - 7.5) / 24) * Math.PI * 2)
+          + 4.8 * gaussian(hour, 15.8, 3.3);
+      });
+
+      const pvNorm = normalise(pv);
+      const baseLoad = hours.map((hour) => {
+        return 5.0 + meta.loadBias
+          + 0.48 * gaussian(hour, 9.5, 2.1)
+          + 1.35 * gaussian(hour, 18.2, 3.8)
+          + 0.12 * Math.sin((hour / 24) * Math.PI * 2)
+          + 0.08 * gaussian(hour, 2.4, 1.2);
+      });
+
+      const basePrice = hours.map((hour, index) => {
+        const morning = 18 * gaussian(hour, 8.2, 1.6);
+        const midday = -76 * gaussian(hour, 13.1, 2.3) * (0.35 + 0.85 * pvNorm[index]);
+        const evening = 108 * gaussian(hour, 19.0, 1.7);
+        const late = 20 * gaussian(hour, 21.6, 1.1);
+        const shape = 66 + morning + midday + evening + late + 7 * Math.sin(hour * 0.6);
+        return clamp(64 + meta.priceShock + (shape - 64) * volatility, -75, 330);
+      });
+
+      let scheduledLoad = [...baseLoad];
+      let thermalTarget = Array(points).fill(24.0);
+      let batteryPower = Array(points).fill(0);
+
+      if (optimize) {
+        const cheapness = normalise(basePrice.map((value) => -value));
+        const heatRelief = normalise(ambient.map((value) => -value));
+        const shiftWeights = hours.map((_, index) => 0.3 + 1.45 * cheapness[index] + 0.9 * pvNorm[index] + 0.35 * heatRelief[index]);
+        scheduledLoad = allocateFlexibleLoad(baseLoad, params.flexShare / 100, shiftWeights, dt);
+
+        const heatRisk = clamp((max(ambient) - 24) / 9, 0, 1);
+        const preCool = params.preCool / 100;
+        thermalTarget = hours.map((hour, index) => {
+          const nightCharge = gaussian(hour, 4.8, 1.5) + 0.62 * gaussian(hour, 6.6, 1.2);
+          const hotAfternoon = gaussian(hour, 14.3, 2.5) * heatRisk;
+          const expensiveEvening = gaussian(hour, 19.0, 1.7) * clamp((basePrice[index] - percentile(basePrice, 0.75)) / 90, 0, 1);
+          const target = 24
+            - (1.0 + 1.2 * heatRisk) * preCool * nightCharge
+            - 0.45 * preCool * hotAfternoon
+            + 0.65 * preCool * expensiveEvening;
+          return clamp(target, 21.5, 25.0);
+        });
+
+        const energyCap = params.bessEnergy;
+        const powerCap = params.bessPower;
+        const minSoc = energyCap * 0.15;
+        const maxSoc = energyCap * 0.95;
+        const etaCharge = 0.95;
+        const etaDischarge = 0.95;
+        const p25 = percentile(basePrice, 0.25);
+        const p50 = percentile(basePrice, 0.50);
+        const p75 = percentile(basePrice, 0.75);
+        const p90 = percentile(basePrice, 0.90);
+        const priceSpread = p90 - p25;
+        const targetEvening = energyCap * clamp(0.55 + 0.22 * (priceSpread / 180), 0.55, 0.88);
+        let soc = energyCap * 0.46;
+
+        for (let index = 0; index < points; index += 1) {
+          const misc = 0.22 + 0.04 * scheduledLoad[index];
+          const cooling = 0.2 * scheduledLoad[index]
+            + 0.08 * Math.max(ambient[index] - thermalTarget[index], 0)
+            + 0.24 * Math.max(24 - thermalTarget[index], 0);
+          const facilityWithoutBattery = scheduledLoad[index] + misc + cooling - pv[index];
+          const cheapScore = clamp((p50 - basePrice[index]) / Math.max(8, p50 - p25), 0, 1) + 0.55 * clamp(pvNorm[index] - 0.35, 0, 1);
+          const expensiveScore = clamp((basePrice[index] - p75) / Math.max(8, p90 - p75), 0, 1) + 0.25 * gaussian(hours[index], 19.0, 1.6);
+          const needEveningReserve = index < 66 ? clamp((targetEvening - soc) / Math.max(1, targetEvening), 0, 1) : 0;
+          let command = powerCap * (0.95 * expensiveScore - 0.95 * cheapScore - 0.45 * needEveningReserve);
+
+          if (facilityWithoutBattery < -0.15 && soc < maxSoc) {
+            command = Math.min(command, -Math.min(powerCap, Math.abs(facilityWithoutBattery) + 0.2));
+          }
+
+          if (hours[index] > 17 && basePrice[index] > p75) {
+            command = Math.max(command, powerCap * 0.28);
+          }
+
+          if (command < 0) {
+            const maxCharge = Math.max(0, (maxSoc - soc) / (dt * etaCharge));
+            command = -Math.min(Math.abs(command), maxCharge, powerCap);
+            soc += -command * dt * etaCharge;
+          } else if (command > 0) {
+            const maxDischarge = Math.max(0, (soc - minSoc) * etaDischarge / dt);
+            command = Math.min(command, maxDischarge, powerCap);
+            soc -= (command * dt) / etaDischarge;
+          }
+
+          soc = clamp(soc, minSoc, maxSoc);
+          batteryPower[index] = command;
+        }
+      } else {
+        const energyCap = params.bessEnergy;
+        const powerCap = params.bessPower;
+        const minSoc = energyCap * 0.2;
+        const maxSoc = energyCap * 0.9;
+        let soc = energyCap * 0.5;
+        const highPrice = percentile(basePrice, 0.88);
+
+        for (let index = 0; index < points; index += 1) {
+          const misc = 0.22 + 0.04 * scheduledLoad[index];
+          const cooling = 0.2 * scheduledLoad[index] + 0.08 * Math.max(ambient[index] - 24, 0);
+          const facilityWithoutBattery = scheduledLoad[index] + misc + cooling - pv[index];
+          let command = 0;
+
+          if (facilityWithoutBattery < -0.2 && soc < maxSoc) {
+            command = -Math.min(powerCap, Math.abs(facilityWithoutBattery));
+          } else if (basePrice[index] > highPrice && soc > minSoc) {
+            command = Math.min(powerCap * 0.45, (soc - minSoc) / dt);
+          }
+
+          if (command < 0) {
+            soc = clamp(soc + (-command * dt * 0.95), minSoc, maxSoc);
+          } else if (command > 0) {
+            soc = clamp(soc - (command * dt / 0.95), minSoc, maxSoc);
+          }
+          batteryPower[index] = command;
+        }
+      }
+
+      const energyCap = params.bessEnergy;
+      const soc = [];
+      const etaCharge = 0.95;
+      const etaDischarge = 0.95;
+      let runningSoc = energyCap * (optimize ? 0.46 : 0.5);
+      const minSoc = energyCap * (optimize ? 0.15 : 0.2);
+      const maxSoc = energyCap * (optimize ? 0.95 : 0.9);
+
+      for (let index = 0; index < points; index += 1) {
+        if (batteryPower[index] < 0) {
+          runningSoc += -batteryPower[index] * dt * etaCharge;
+        } else {
+          runningSoc -= batteryPower[index] * dt / etaDischarge;
+        }
+        runningSoc = clamp(runningSoc, minSoc, maxSoc);
+        soc.push(runningSoc);
+      }
+
+      const miscLoad = scheduledLoad.map((value) => 0.22 + 0.04 * value);
+      const coolingLoad = scheduledLoad.map((value, index) => {
+        return 0.2 * value
+          + 0.08 * Math.max(ambient[index] - thermalTarget[index], 0)
+          + 0.24 * Math.max(24 - thermalTarget[index], 0);
+      });
+      const facilityLoad = scheduledLoad.map((value, index) => value + miscLoad[index] + coolingLoad[index]);
+      const grid = facilityLoad.map((value, index) => value - pv[index] - batteryPower[index]);
+      const importCost = sum(grid.map((value, index) => Math.max(value, 0) * basePrice[index] * dt));
+      const exportRevenue = sum(grid.map((value, index) => Math.max(-value, 0) * basePrice[index] * 0.9 * dt));
+      const shiftedEnergy = 0.5 * sum(scheduledLoad.map((value, index) => Math.abs(value - baseLoad[index]) * dt));
+
+      return {
+        dt,
+        hours,
+        price: basePrice,
+        pv,
+        ambient,
+        baseLoad,
+        scheduledLoad,
+        thermalTarget,
+        batteryPower,
+        soc,
+        coolingLoad,
+        facilityLoad,
+        grid,
+        kpis: {
+          netCost: importCost - exportRevenue,
+          peakGrid: max(grid),
+          shiftedEnergy,
+          minThermalTarget: min(thermalTarget),
+          eveningSoc: interpolateSeries(soc, 18),
+          finalSoc: soc[soc.length - 1]
+        }
+      };
+    }
+
+    function simulateLowerLayer(plan, params) {
+      const hour = Math.round(params.selectedHour);
+      const points = 12;
+      const dt = 1 / 12;
+      const severity = params.disturbance / 100;
+      const hardLimit = 27.0;
+      const targetGrid = [];
+      const actualGrid = [];
+      const targetTemp = [];
+      const actualTemp = [];
+      const batteryTrim = [];
+      const fanPct = [];
+      const chillerPct = [];
+      const time = Array.from({ length: points }, (_, index) => hour + index * dt);
+
+      let tempState = clamp(interpolateSeries(plan.thermalTarget, hour) + 0.3 + 0.8 * severity, 22.2, 26.3);
+      let socState = interpolateSeries(plan.soc, hour);
+      let prevGridError = 0;
+
+      for (let index = 0; index < points; index += 1) {
+        const t = hour + index * dt;
+        const plannedGrid = interpolateSeries(plan.grid, t);
+        const plannedBattery = interpolateSeries(plan.batteryPower, t);
+        const plannedLoad = interpolateSeries(plan.scheduledLoad, t);
+        const plannedTemp = interpolateSeries(plan.thermalTarget, t);
+        const plannedCooling = interpolateSeries(plan.coolingLoad, t);
+        const basePv = interpolateSeries(plan.pv, t);
+        const baseAmbient = interpolateSeries(plan.ambient, t);
+
+        const pvShock = gaussian(index, 3.0, 1.1);
+        const loadShock = gaussian(index, 6.7, 1.5);
+        const heatShock = gaussian(index, 7.4, 1.8);
+        const livePv = Math.max(0, basePv * (1 - severity * (0.12 + 0.56 * pvShock)));
+        const liveLoad = plannedLoad * (1 + severity * (0.02 + 0.12 * loadShock));
+        const liveAmbient = baseAmbient + severity * (0.6 + 2.2 * heatShock);
+
+        const thermalError = tempState - plannedTemp;
+        const safetyBoost = clamp((tempState - (hardLimit - 0.35)) / 1.0, 0, 1);
+        const fan = clamp(
+          36 + 18 * thermalError + 8 * (liveAmbient - baseAmbient) + 12 * (liveLoad - plannedLoad) + 28 * safetyBoost,
+          30,
+          100
+        );
+        const chillerPctRaw = clamp(
+          18 + 16 * Math.max(liveAmbient - plannedTemp, 0) + 26 * Math.max(thermalError, 0) + 24 * safetyBoost,
+          18,
+          100
+        );
+        const chillerMw = 0.7 + 4.0 * (chillerPctRaw / 100);
+        const coolingActual = 0.18 * liveLoad + 0.0075 * fan + chillerMw;
+        const misc = 0.22 + 0.04 * liveLoad;
+        const rawGrid = liveLoad + misc + coolingActual - livePv - plannedBattery;
+
+        const dischargeLimitBySoc = Math.max(0, (socState - params.bessEnergy * 0.15) * 0.95 / dt);
+        const chargeLimitBySoc = Math.max(0, (params.bessEnergy * 0.95 - socState) / (dt * 0.95));
+        const maxDischarge = Math.min(params.bessPower, dischargeLimitBySoc);
+        const maxCharge = Math.min(params.bessPower, chargeLimitBySoc);
+        const trimRequest = 0.92 * (rawGrid - plannedGrid) + 0.32 * prevGridError;
+        const totalBattery = clamp(plannedBattery + trimRequest, -maxCharge, maxDischarge);
+        const trim = totalBattery - plannedBattery;
+        const liveGrid = liveLoad + misc + coolingActual - livePv - totalBattery;
+
+        if (totalBattery < 0) {
+          socState += -totalBattery * dt * 0.95;
+        } else {
+          socState -= (totalBattery * dt) / 0.95;
+        }
+        socState = clamp(socState, params.bessEnergy * 0.15, params.bessEnergy * 0.95);
+
+        const tempRate = 0.38 * (liveAmbient - tempState)
+          + 0.70 * (liveLoad - plannedLoad)
+          - 0.62 * (coolingActual - plannedCooling)
+          + 0.32 * severity * heatShock;
+        tempState = clamp(tempState + tempRate * dt, 21.2, 28.4);
+        prevGridError = liveGrid - plannedGrid;
+
+        targetGrid.push(plannedGrid);
+        actualGrid.push(liveGrid);
+        targetTemp.push(plannedTemp);
+        actualTemp.push(tempState);
+        batteryTrim.push(trim);
+        fanPct.push(fan);
+        chillerPct.push(chillerPctRaw);
+      }
+
+      return {
+        hour,
+        time,
+        targetGrid,
+        actualGrid,
+        targetTemp,
+        actualTemp,
+        batteryTrim,
+        fanPct,
+        chillerPct,
+        maxTemp: max(actualTemp),
+        maxTrackingError: max(actualGrid.map((value, index) => Math.abs(value - targetGrid[index]))),
+        maxTrim: max(batteryTrim.map((value) => Math.abs(value)))
+      };
     }
 
     function buildPresetButtons() {
       const container = document.getElementById("preset-grid");
-      container.innerHTML = Object.entries(presets)
-        .map(([key, preset]) => {
-          const active = key === state.preset ? "active" : "";
-          return `
-            <button class="preset-btn ${active}" data-preset="${key}">
-              ${preset.short}
-              <span>${preset.description}</span>
-            </button>
-          `;
-        })
-        .join("");
+      container.innerHTML = Object.entries(presets).map(([key, preset]) => {
+        const active = key === state.preset ? "active" : "";
+        return `
+          <button class="preset-btn ${active}" data-preset="${key}">
+            ${preset.short}
+            <span>${preset.description}</span>
+          </button>
+        `;
+      }).join("");
 
       container.querySelectorAll(".preset-btn").forEach((button) => {
         button.addEventListener("click", () => applyPreset(button.dataset.preset));
@@ -995,8 +1175,7 @@
     function applyPreset(name) {
       state.preset = name;
       state.meta = { ...presets[name].meta };
-      const values = presets[name].values;
-      Object.entries(values).forEach(([key, value]) => {
+      Object.entries(presets[name].values).forEach(([key, value]) => {
         const input = document.getElementById(key);
         if (input) {
           input.value = value;
@@ -1020,362 +1199,8 @@
       });
     }
 
-    function allocateFlexibleLoad(baseLoad, flexFraction, weights, dt) {
-      const fixed = baseLoad.map((v) => v * (1 - flexFraction));
-      const totalFlexEnergy = sum(baseLoad.map((v) => v * flexFraction * dt));
-      const maxFlexPerStep = baseLoad.map((v) => v * flexFraction * 2.4 + 0.18);
-      const flexPower = new Array(baseLoad.length).fill(0);
-      let remainingEnergy = totalFlexEnergy;
-      let active = new Set(baseLoad.map((_, index) => index));
-
-      for (let iter = 0; iter < 16 && remainingEnergy > 1e-6 && active.size > 0; iter += 1) {
-        let totalWeight = 0;
-        active.forEach((index) => {
-          totalWeight += weights[index];
-        });
-
-        let leftover = 0;
-        const next = new Set();
-        active.forEach((index) => {
-          const share = remainingEnergy * (weights[index] / (totalWeight || 1));
-          const availableEnergy = Math.max(0, maxFlexPerStep[index] * dt - flexPower[index] * dt);
-          const add = Math.min(share, availableEnergy);
-          flexPower[index] += add / dt;
-          leftover += share - add;
-          if (availableEnergy - add > 1e-6) {
-            next.add(index);
-          }
-        });
-        remainingEnergy = leftover;
-        active = next;
-      }
-
-      if (remainingEnergy > 1e-6) {
-        const even = remainingEnergy / (baseLoad.length * dt);
-        for (let i = 0; i < flexPower.length; i += 1) {
-          flexPower[i] += even;
-        }
-      }
-
-      return fixed.map((v, i) => v + flexPower[i]);
-    }
-
-    function simulateFacility(params, meta, useMpc) {
-      const dt = 0.25;
-      const points = 96;
-      const hours = Array.from({ length: points }, (_, i) => i / 4);
-      const volatility = params.priceVolatility / 100;
-
-      const pv = hours.map((h) => {
-        const raw = Math.sin((Math.PI * (h - 6)) / 12);
-        const solarShape = raw > 0 ? raw ** 1.6 : 0;
-        const cloudRipple = 1 - 0.06 * Math.sin(h * 1.8) - 0.03 * Math.cos(h * 0.9);
-        return Math.max(0, params.pvPeak * meta.cloudFactor * solarShape * cloudRipple);
-      });
-
-      const ambient = hours.map((h) => {
-        return 18 + meta.ambientBias
-          + 4.8 * Math.sin(((h - 8) / 24) * Math.PI * 2)
-          + 4.6 * gaussian(h, 16, 3.1);
-      });
-
-      const basePrice = hours.map((h, i) => {
-        const priceShape = 65
-          - 18 * gaussian(h, 3.5, 2.2)
-          + 24 * gaussian(h, 8, 1.8)
-          - 58 * gaussian(h, 13.1, 2.4) * (pv[i] / (params.pvPeak || 1))
-          + 92 * gaussian(h, 19.1, 1.75)
-          + 22 * gaussian(h, 21.5, 1.2)
-          + 8 * Math.sin(h * 0.7);
-        const centered = (priceShape - 70) * volatility;
-        return clamp(70 + meta.priceShock + centered, -90, 340);
-      });
-
-      const carbon = hours.map((h, i) => {
-        return clamp(
-          300 + meta.carbonBias
-          + 70 * gaussian(h, 7.5, 2.0)
-          + 110 * gaussian(h, 19.0, 2.4)
-          - 120 * (pv[i] / (params.pvPeak || 1))
-          - 25 * gaussian(h, 13.0, 1.8),
-          80,
-          650
-        );
-      });
-
-      const itForecast = hours.map((h) => {
-        return 5.1 + meta.loadBias
-          + 0.55 * gaussian(h, 10, 2.1)
-          + 1.35 * gaussian(h, 18.0, 4.0)
-          + 0.18 * Math.sin((h / 24) * Math.PI * 2)
-          + 0.12 * gaussian(h, 2.5, 1.3);
-      });
-
-      let scheduledIt = [...itForecast];
-      let thermalTarget = Array(points).fill(24.0);
-      let batteryPower = Array(points).fill(0);
-
-      if (useMpc) {
-        const invPrice = normalise(basePrice.map((value) => -value));
-        const invCarbon = normalise(carbon.map((value) => -value));
-        const pvNorm = normalise(pv);
-        const weights = hours.map((_, i) => 0.35 + 1.2 * invPrice[i] + 0.75 * pvNorm[i] + 0.6 * invCarbon[i]);
-        const flexFraction = params.flexShare / 100;
-        scheduledIt = allocateFlexibleLoad(itForecast, flexFraction, weights, dt);
-
-        const heatAhead = clamp((max(ambient.slice(48, 72)) - 25) / 8, 0, 1);
-        const preCool = params.preCool / 100;
-        thermalTarget = hours.map((h, i) => {
-          const nightWindow = gaussian(h, 4.3, 1.5) + 0.55 * gaussian(h, 6.2, 1.2);
-          const eveningRelax = gaussian(h, 19.1, 1.8) * clamp((basePrice[i] - percentile(basePrice, 0.75)) / 70, 0, 1);
-          const temp = 24
-            - 2.5 * preCool * heatAhead * nightWindow
-            + 0.75 * preCool * eveningRelax;
-          return clamp(temp, 21.0, 25.4);
-        });
-
-        const energyCap = params.bessEnergy;
-        const powerCap = params.bessPower;
-        const minSoc = energyCap * 0.12;
-        const maxSoc = energyCap * 0.95;
-        const etaCharge = 0.95;
-        const etaDischarge = 0.95;
-        const p35 = percentile(basePrice, 0.35);
-        const p75 = percentile(basePrice, 0.75);
-        const c65 = percentile(carbon, 0.65);
-        const targetByEvening = energyCap * clamp(0.64 + 0.2 * (percentile(basePrice.slice(64, 84), 0.8) / 220), 0.64, 0.88);
-        let soc = energyCap * 0.44;
-
-        for (let i = 0; i < points; i += 1) {
-          const misc = 0.24 + 0.04 * scheduledIt[i];
-          const cooling = 0.18 * scheduledIt[i] + 0.075 * Math.max(ambient[i] - thermalTarget[i], 0) + 0.24 * Math.max(24 - thermalTarget[i], 0);
-          const facilityNoBatt = scheduledIt[i] + cooling + misc - pv[i];
-          const solarSurplus = Math.max(0, -facilityNoBatt);
-          let cmd = 0;
-
-          if (solarSurplus > 0.1 && soc < maxSoc) {
-            cmd = -Math.min(powerCap, solarSurplus + 0.25);
-          } else if (i < 68 && soc < targetByEvening && (basePrice[i] < p35 || (pv[i] > params.pvPeak * 0.48 && carbon[i] < c65))) {
-            cmd = -Math.min(powerCap, (targetByEvening - soc) / (dt * etaCharge));
-          } else if (i >= 68 && (basePrice[i] > p75 || carbon[i] > c65)) {
-            cmd = Math.min(powerCap, (soc - minSoc) * etaDischarge / dt);
-          } else if (basePrice[i] > percentile(basePrice, 0.88) && soc > minSoc + 0.4) {
-            cmd = Math.min(powerCap, (soc - minSoc) * etaDischarge / dt);
-          }
-
-          if (cmd < 0) {
-            const maxCharge = (maxSoc - soc) / (dt * etaCharge);
-            cmd = -Math.min(Math.abs(cmd), Math.max(0, maxCharge));
-            soc += -cmd * dt * etaCharge;
-          } else if (cmd > 0) {
-            const maxDischarge = (soc - minSoc) * etaDischarge / dt;
-            cmd = Math.min(cmd, Math.max(0, maxDischarge));
-            soc -= (cmd * dt) / etaDischarge;
-          }
-
-          soc = clamp(soc, minSoc, maxSoc);
-          batteryPower[i] = cmd;
-        }
-      } else {
-        const energyCap = params.bessEnergy;
-        const powerCap = params.bessPower;
-        const minSoc = energyCap * 0.2;
-        const maxSoc = energyCap * 0.9;
-        let soc = energyCap * 0.5;
-        thermalTarget = Array(points).fill(24.0);
-
-        for (let i = 0; i < points; i += 1) {
-          const cooling = 0.18 * scheduledIt[i] + 0.075 * Math.max(ambient[i] - thermalTarget[i], 0);
-          const misc = 0.24 + 0.04 * scheduledIt[i];
-          const facilityNoBatt = scheduledIt[i] + cooling + misc - pv[i];
-          let cmd = 0;
-          if (facilityNoBatt < -0.15 && soc < maxSoc) {
-            cmd = -Math.min(powerCap, -facilityNoBatt);
-          } else if (basePrice[i] > percentile(basePrice, 0.88) && soc > minSoc) {
-            cmd = Math.min(powerCap * 0.45, (soc - minSoc) / dt);
-          }
-          if (cmd < 0) {
-            soc = clamp(soc + (-cmd * dt * 0.95), minSoc, maxSoc);
-          } else if (cmd > 0) {
-            soc = clamp(soc - (cmd * dt / 0.95), minSoc, maxSoc);
-          }
-          batteryPower[i] = cmd;
-        }
-      }
-
-      const soc = [];
-      let runningSoc = params.bessEnergy * (useMpc ? 0.44 : 0.5);
-      const minSoc = params.bessEnergy * (useMpc ? 0.12 : 0.2);
-      const maxSoc = params.bessEnergy * (useMpc ? 0.95 : 0.9);
-      const etaCharge = 0.95;
-      const etaDischarge = 0.95;
-
-      for (let i = 0; i < points; i += 1) {
-        if (batteryPower[i] < 0) {
-          runningSoc += -batteryPower[i] * dt * etaCharge;
-        } else {
-          runningSoc -= batteryPower[i] * dt / etaDischarge;
-        }
-        runningSoc = clamp(runningSoc, minSoc, maxSoc);
-        soc.push(runningSoc);
-      }
-
-      const miscLoad = scheduledIt.map((value) => 0.24 + 0.04 * value);
-      const coolingLoad = scheduledIt.map((value, i) => {
-        return 0.18 * value
-          + 0.075 * Math.max(ambient[i] - thermalTarget[i], 0)
-          + 0.24 * Math.max(24 - thermalTarget[i], 0);
-      });
-      const facilityLoad = scheduledIt.map((value, i) => value + miscLoad[i] + coolingLoad[i]);
-      const grid = facilityLoad.map((value, i) => value - pv[i] - batteryPower[i]);
-
-      const carbonWeightFactor = 1 + (useMpc ? params.carbonWeight / 180 : 0);
-      const importCost = sum(grid.map((value, i) => Math.max(value, 0) * basePrice[i] * dt));
-      const exportRevenue = sum(grid.map((value, i) => Math.max(-value, 0) * basePrice[i] * 0.9 * dt));
-      const netCost = importCost - exportRevenue;
-      const carbonTons = sum(grid.map((value, i) => Math.max(value, 0) * carbon[i] * dt / 1000)) * carbonWeightFactor;
-      const pue = sum(facilityLoad.map((value) => value * dt)) / sum(scheduledIt.map((value) => value * dt));
-      const peakGrid = max(grid);
-      const exportHours = grid.filter((value) => value < 0).length * dt;
-
-      return {
-        dt,
-        hours,
-        price: basePrice,
-        carbon,
-        pv,
-        ambient,
-        itForecast,
-        itScheduled: scheduledIt,
-        thermalTarget,
-        batteryPower,
-        soc,
-        coolingLoad,
-        miscLoad,
-        facilityLoad,
-        grid,
-        kpis: {
-          netCost,
-          carbonTons,
-          pue,
-          peakGrid,
-          exportHours,
-          finalSoc: soc[soc.length - 1],
-          eveningSoc: soc[76],
-          minThermalTarget: min(thermalTarget)
-        }
-      };
-    }
-
-    function simulateLowerLayer(mpcCase, params) {
-      const hour = Math.round(params.selectedHour);
-      const points = 12;
-      const dt = 1 / 12;
-      const disturbance = params.disturbance / 100;
-      const startQuarter = hour * 4;
-      const time = Array.from({ length: points }, (_, i) => hour + i / 12);
-      const targetGrid = [];
-      const actualGrid = [];
-      const targetTemp = [];
-      const actualTemp = [];
-      const fan = [];
-      const chiller = [];
-      const battTrim = [];
-      const actualPv = [];
-      const actualIt = [];
-      const actualSoc = [];
-      let tempState = clamp(mpcCase.thermalTarget[startQuarter] + 0.7 + 0.8 * disturbance, 22, 26.2);
-      let socState = mpcCase.soc[Math.max(0, startQuarter - 1)];
-
-      for (let i = 0; i < points; i += 1) {
-        const q = clamp(Math.floor((hour + i / 12) * 4), 0, mpcCase.hours.length - 1);
-        const frac = ((hour + i / 12) * 4) - q;
-        const q2 = clamp(q + 1, 0, mpcCase.hours.length - 1);
-
-        const interp = (arr) => arr[q] * (1 - frac) + arr[q2] * frac;
-        const plannedGrid = interp(mpcCase.grid);
-        const plannedBattery = interp(mpcCase.batteryPower);
-        const plannedIt = interp(mpcCase.itScheduled);
-        const plannedTemp = interp(mpcCase.thermalTarget);
-        const basePv = interp(mpcCase.pv);
-        const baseAmbient = interp(mpcCase.ambient);
-
-        const pvMiss = 1 - 0.18 * disturbance - 0.33 * disturbance * gaussian(i, 4.2, 1.4);
-        const livePv = Math.max(0, basePv * pvMiss);
-        const liveIt = plannedIt + disturbance * (0.35 * gaussian(i, 6.5, 1.8) + 0.15 * Math.sin(i * 0.9));
-        const liveAmbient = baseAmbient + disturbance * (0.8 + 0.8 * Math.sin(i * 0.55));
-
-        const tempError = tempState - plannedTemp;
-        const fanCmd = clamp(46 + 16 * tempError + 9 * disturbance + 6 * (liveIt - plannedIt), 34, 100);
-        const chillerCmd = clamp(
-          0.65 + 0.25 * liveIt + 0.11 * Math.max(liveAmbient - plannedTemp, 0) + 0.75 * Math.max(tempError, 0),
-          0.55,
-          3.8
-        );
-
-        const actualCooling = 0.24 + 0.0085 * fanCmd + chillerCmd;
-        const misc = 0.24 + 0.04 * liveIt;
-        let liveGrid = liveIt + actualCooling + misc - livePv - plannedBattery;
-        let trim = clamp(liveGrid - plannedGrid, -params.bessPower * 0.7, params.bessPower * 0.7);
-
-        if (trim > 0) {
-          const maxDischarge = Math.max(0, (socState - params.bessEnergy * 0.12) * 0.95 / dt);
-          trim = Math.min(trim, maxDischarge);
-          socState -= (trim * dt) / 0.95;
-        } else if (trim < 0) {
-          const maxCharge = Math.max(0, (params.bessEnergy * 0.95 - socState) / (dt * 0.95));
-          trim = -Math.min(Math.abs(trim), maxCharge);
-          socState += -trim * dt * 0.95;
-        }
-
-        const totalBattery = clamp(plannedBattery + trim, -params.bessPower, params.bessPower);
-        liveGrid = liveIt + actualCooling + misc - livePv - totalBattery;
-
-        const thermalDrift =
-          0.11 * (liveAmbient - tempState)
-          + 0.34 * (liveIt - 5.1)
-          - 0.17 * actualCooling
-          - 0.014 * fanCmd
-          + 0.12 * disturbance;
-        tempState = clamp(tempState + thermalDrift * dt * 3.1, 20.8, 28.4);
-
-        targetGrid.push(plannedGrid);
-        actualGrid.push(liveGrid);
-        targetTemp.push(plannedTemp);
-        actualTemp.push(tempState);
-        fan.push(fanCmd);
-        chiller.push(chillerCmd);
-        battTrim.push(trim);
-        actualPv.push(livePv);
-        actualIt.push(liveIt);
-        actualSoc.push(socState);
-      }
-
-      const maxTempObserved = max(actualTemp);
-      const tempViolations = actualTemp.filter((value) => value > 27).length;
-      const maxGridError = max(actualGrid.map((value, i) => Math.abs(value - targetGrid[i])));
-
-      return {
-        hour,
-        time,
-        targetGrid,
-        actualGrid,
-        targetTemp,
-        actualTemp,
-        fan,
-        chiller,
-        battTrim,
-        actualPv,
-        actualIt,
-        actualSoc,
-        maxTempObserved,
-        tempViolations,
-        maxGridError
-      };
-    }
-
-    function makeLegend(targetId, series) {
-      document.getElementById(targetId).innerHTML = series.map((item) => `
+    function makeLegend(targetId, items) {
+      document.getElementById(targetId).innerHTML = items.map((item) => `
         <span class="legend-item">
           <span class="swatch" style="background:${item.color}"></span>${item.name}
         </span>
@@ -1384,22 +1209,17 @@
 
     function renderChart(targetId, config) {
       const svg = document.getElementById(targetId);
-      const width = Math.max(720, Math.round(svg.getBoundingClientRect().width || 720));
-      const height = 280;
-      const margin = { top: 22, right: 58, bottom: 34, left: 56 };
+      const width = Math.max(660, Math.round(svg.getBoundingClientRect().width || 660));
+      const height = 278;
+      const margin = { top: 18, right: 56, bottom: 34, left: 54 };
       const plotWidth = width - margin.left - margin.right;
       const plotHeight = height - margin.top - margin.bottom;
       const n = config.labels.length;
-      const leftSeries = config.series.filter((s) => s.axis !== "right");
-      const rightSeries = config.series.filter((s) => s.axis === "right");
+      const leftSeries = config.series.filter((series) => series.axis !== "right");
+      const rightSeries = config.series.filter((series) => series.axis === "right");
 
       const leftValues = leftSeries.flatMap((series) => series.data);
       const rightValues = rightSeries.flatMap((series) => series.data);
-
-      const leftDomain = config.leftDomain || [Math.min(...leftValues), Math.max(...leftValues)];
-      const rightDomain = rightSeries.length
-        ? (config.rightDomain || [Math.min(...rightValues), Math.max(...rightValues)])
-        : [0, 1];
 
       const padDomain = (domain, includeZero = false) => {
         let [lo, hi] = domain;
@@ -1415,107 +1235,110 @@
         return [lo - span * 0.05, hi + span * 0.05];
       };
 
-      const [leftMin, leftMax] = padDomain(leftDomain, config.includeZeroLeft);
-      const [rightMin, rightMax] = padDomain(rightDomain, config.includeZeroRight);
+      const [leftMin, leftMax] = padDomain(config.leftDomain || [Math.min(...leftValues), Math.max(...leftValues)], config.includeZeroLeft);
+      const [rightMin, rightMax] = padDomain(config.rightDomain || [Math.min(...rightValues), Math.max(...rightValues)], config.includeZeroRight);
 
       const xPos = (index) => margin.left + (plotWidth * index) / Math.max(1, n - 1);
       const yLeft = (value) => margin.top + plotHeight * (1 - (value - leftMin) / (leftMax - leftMin));
       const yRight = (value) => margin.top + plotHeight * (1 - (value - rightMin) / (rightMax - rightMin));
 
-      const pathFor = (series) => {
+      const linePath = (series) => {
         const yMap = series.axis === "right" ? yRight : yLeft;
         return series.data.map((value, index) => `${index === 0 ? "M" : "L"} ${xPos(index).toFixed(2)} ${yMap(value).toFixed(2)}`).join(" ");
       };
 
-      const areaPathFor = (series, baseline = plotHeight + margin.top) => {
+      const areaPath = (series) => {
         const yMap = series.axis === "right" ? yRight : yLeft;
-        let path = `M ${xPos(0).toFixed(2)} ${baseline.toFixed(2)} `;
+        let path = `M ${xPos(0).toFixed(2)} ${(margin.top + plotHeight).toFixed(2)} `;
         series.data.forEach((value, index) => {
           path += `L ${xPos(index).toFixed(2)} ${yMap(value).toFixed(2)} `;
         });
-        path += `L ${xPos(n - 1).toFixed(2)} ${baseline.toFixed(2)} Z`;
+        path += `L ${xPos(n - 1).toFixed(2)} ${(margin.top + plotHeight).toFixed(2)} Z`;
         return path;
       };
 
-      const barsFor = (series) => {
-        const zero = series.axis === "right" ? yRight(0) : yLeft(0);
+      const barMarkup = (series) => {
         const yMap = series.axis === "right" ? yRight : yLeft;
-        const barWidth = plotWidth / Math.max(n, 1) * 0.72;
+        const zero = yMap(0);
+        const barWidth = plotWidth / Math.max(1, n) * 0.7;
         return series.data.map((value, index) => {
           const x = xPos(index) - barWidth / 2;
           const y = Math.min(yMap(value), zero);
           const h = Math.abs(yMap(value) - zero);
-          return `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${barWidth.toFixed(2)}" height="${h.toFixed(2)}" rx="3" fill="${series.color}" opacity="${series.opacity || 0.58}"></rect>`;
+          return `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${barWidth.toFixed(2)}" height="${h.toFixed(2)}" rx="3" fill="${series.color}" opacity="${series.opacity || 0.55}"></rect>`;
         }).join("");
       };
 
-      let markup = `
-        <rect x="0" y="0" width="${width}" height="${height}" rx="14" fill="transparent"></rect>
-      `;
+      let markup = `<rect x="0" y="0" width="${width}" height="${height}" rx="15" fill="transparent"></rect>`;
 
       for (let tick = 0; tick <= 4; tick += 1) {
         const y = margin.top + (plotHeight * tick) / 4;
-        const leftValue = (leftMax - (leftMax - leftMin) * tick / 4);
+        const leftValue = leftMax - ((leftMax - leftMin) * tick) / 4;
         markup += `
           <line x1="${margin.left}" y1="${y.toFixed(2)}" x2="${width - margin.right}" y2="${y.toFixed(2)}"
-            stroke="rgba(255,255,255,0.08)" stroke-width="1" />
-          <text x="${margin.left - 10}" y="${(y + 4).toFixed(2)}" text-anchor="end" fill="rgba(255,255,255,0.48)" font-size="11">
+            stroke="rgba(23,33,43,0.08)" stroke-width="1"></line>
+          <text x="${margin.left - 10}" y="${(y + 4).toFixed(2)}" text-anchor="end" fill="rgba(23,33,43,0.5)" font-size="11">
             ${config.leftFormatter(leftValue)}
           </text>
         `;
         if (rightSeries.length) {
-          const rightValue = (rightMax - (rightMax - rightMin) * tick / 4);
+          const rightValue = rightMax - ((rightMax - rightMin) * tick) / 4;
           markup += `
-            <text x="${width - margin.right + 10}" y="${(y + 4).toFixed(2)}" text-anchor="start" fill="rgba(255,255,255,0.48)" font-size="11">
+            <text x="${width - margin.right + 10}" y="${(y + 4).toFixed(2)}" text-anchor="start" fill="rgba(23,33,43,0.5)" font-size="11">
               ${config.rightFormatter(rightValue)}
             </text>
           `;
         }
       }
 
-      const xTicks = config.tickEvery || Math.max(1, Math.round(n / 6));
-      for (let i = 0; i < n; i += xTicks) {
-        const x = xPos(i);
+      const tickEvery = config.tickEvery || Math.max(1, Math.round(n / 6));
+      for (let index = 0; index < n; index += tickEvery) {
+        const x = xPos(index);
         markup += `
-          <line x1="${x.toFixed(2)}" y1="${margin.top}" x2="${x.toFixed(2)}" y2="${height - margin.bottom}" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
-          <text x="${x.toFixed(2)}" y="${height - 10}" text-anchor="middle" fill="rgba(255,255,255,0.48)" font-size="11">
-            ${config.labels[i]}
+          <line x1="${x.toFixed(2)}" y1="${margin.top}" x2="${x.toFixed(2)}" y2="${height - margin.bottom}"
+            stroke="rgba(23,33,43,0.05)" stroke-width="1"></line>
+          <text x="${x.toFixed(2)}" y="${height - 10}" text-anchor="middle" fill="rgba(23,33,43,0.48)" font-size="11">
+            ${config.labels[index]}
           </text>
         `;
       }
 
       markup += `
-        <line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
-        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+        <line x1="${margin.left}" y1="${height - margin.bottom}" x2="${width - margin.right}" y2="${height - margin.bottom}"
+          stroke="rgba(23,33,43,0.18)" stroke-width="1.1"></line>
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left}" y2="${height - margin.bottom}"
+          stroke="rgba(23,33,43,0.18)" stroke-width="1.1"></line>
       `;
+
       if (rightSeries.length) {
         markup += `
-          <line x1="${width - margin.right}" y1="${margin.top}" x2="${width - margin.right}" y2="${height - margin.bottom}" stroke="rgba(255,255,255,0.18)" stroke-width="1.2" />
+          <line x1="${width - margin.right}" y1="${margin.top}" x2="${width - margin.right}" y2="${height - margin.bottom}"
+            stroke="rgba(23,33,43,0.18)" stroke-width="1.1"></line>
         `;
       }
 
       config.series.filter((series) => series.type === "area").forEach((series) => {
-        markup += `<path d="${areaPathFor(series)}" fill="${series.color}" opacity="${series.opacity || 0.18}" stroke="none"></path>`;
+        markup += `<path d="${areaPath(series)}" fill="${series.color}" opacity="${series.opacity || 0.16}" stroke="none"></path>`;
       });
 
       config.series.filter((series) => series.type === "bar").forEach((series) => {
-        markup += barsFor(series);
+        markup += barMarkup(series);
       });
 
-      config.series.filter((series) => series.type !== "bar" && series.type !== "areaOnly").forEach((series) => {
+      config.series.filter((series) => series.type !== "bar").forEach((series) => {
         markup += `
-          <path d="${pathFor(series)}" fill="none" stroke="${series.color}" stroke-width="${series.strokeWidth || 2.8}"
-            stroke-linecap="round" stroke-linejoin="round" opacity="${series.opacity || 1}"></path>
+          <path d="${linePath(series)}" fill="none" stroke="${series.color}" stroke-width="${series.strokeWidth || 2.5}"
+            stroke-linecap="round" stroke-linejoin="round" opacity="${series.opacity || 1}"
+            ${series.strokeDasharray ? `stroke-dasharray="${series.strokeDasharray}"` : ""}></path>
         `;
       });
 
       if (config.thresholds) {
         config.thresholds.forEach((threshold) => {
-          const yMap = threshold.axis === "right" ? yRight : yLeft;
-          const y = yMap(threshold.value);
+          const y = (threshold.axis === "right" ? yRight : yLeft)(threshold.value);
           markup += `
             <line x1="${margin.left}" y1="${y.toFixed(2)}" x2="${width - margin.right}" y2="${y.toFixed(2)}"
-              stroke="${threshold.color}" stroke-width="1.3" stroke-dasharray="6 6" opacity="0.85" />
+              stroke="${threshold.color}" stroke-width="1.3" stroke-dasharray="6 5"></line>
             <text x="${width - margin.right - 6}" y="${(y - 6).toFixed(2)}" text-anchor="end" fill="${threshold.color}" font-size="11">
               ${threshold.label}
             </text>
@@ -1529,49 +1352,79 @@
       svg.innerHTML = markup;
     }
 
-    function renderKpis(mpcCase, baselineCase, lowerCase) {
-      const savings = baselineCase.kpis.netCost - mpcCase.kpis.netCost;
-      const carbonGain = baselineCase.kpis.carbonTons - mpcCase.kpis.carbonTons;
-      const peakGain = baselineCase.kpis.peakGrid - mpcCase.kpis.peakGrid;
-      const exportDelta = mpcCase.kpis.exportHours - baselineCase.kpis.exportHours;
-      const tempMargin = 27 - lowerCase.maxTempObserved;
+    function renderStory(plan, lower, params) {
+      const preset = presets[state.preset];
+      const cheapestHour = plan.hours[plan.price.indexOf(min(plan.price))];
+      const priciestHour = plan.hours[plan.price.indexOf(max(plan.price))];
+      document.getElementById("scenario-badge").textContent = preset.short;
+      document.getElementById("story-title").textContent = preset.title;
+      document.getElementById("story-text").textContent = preset.note;
+      document.getElementById("story-talking-points").textContent =
+        `Charge bias near ${String(Math.floor(cheapestHour)).padStart(2, "0")}:00, discharge bias near ${String(Math.floor(priciestHour)).padStart(2, "0")}:00, and the lower layer is re-tracking the ${String(lower.hour).padStart(2, "0")}:00 hour with ${params.disturbance.toFixed(0)}% disturbance severity.`;
+    }
 
+    function renderImpacts(plan, lower) {
+      const items = [
+        {
+          value: `${plan.kpis.shiftedEnergy.toFixed(1)} MWh`,
+          label: "Workload shifted into cheaper hours"
+        },
+        {
+          value: `${(24 - plan.kpis.minThermalTarget).toFixed(1)} C`,
+          label: "Thermal buffer below nominal"
+        },
+        {
+          value: `${plan.kpis.eveningSoc.toFixed(1)} MWh`,
+          label: "Battery energy available at 18:00"
+        },
+        {
+          value: `${lower.maxTrim.toFixed(2)} MW`,
+          label: "Max lower-layer battery trim"
+        }
+      ];
+
+      document.getElementById("impact-grid").innerHTML = items.map((item) => `
+        <div class="impact-item">
+          <strong>${item.value}</strong>
+          <span>${item.label}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderKpis(plan, baseline, lower) {
+      const savings = baseline.kpis.netCost - plan.kpis.netCost;
+      const peakCut = baseline.kpis.peakGrid - plan.kpis.peakGrid;
+      const tempMargin = 27 - lower.maxTemp;
       const cards = [
         {
-          value: humanMoney(mpcCase.kpis.netCost),
-          label: "24h net power cost",
-          delta: `${savings >= 0 ? "Saves" : "Adds"} ${humanMoney(Math.abs(savings))} vs flat baseline`,
+          value: savings >= 0 ? humanMoney(savings) : `-EUR ${Math.abs(savings).toFixed(0)}`,
+          label: "Cost delta vs flat baseline",
+          delta: savings >= 0 ? "economic MPC wins" : "more expensive than baseline",
           cls: savings >= 0 ? "good" : "bad"
         },
         {
-          value: `${mpcCase.kpis.carbonTons.toFixed(1)} t`,
-          label: "Weighted CO2 impact",
-          delta: `${carbonGain >= 0 ? "-" : "+"}${Math.abs(carbonGain).toFixed(1)} t vs baseline`,
-          cls: carbonGain >= 0 ? "good" : "bad"
+          value: `${peakCut >= 0 ? "-" : "+"}${Math.abs(peakCut).toFixed(2)} MW`,
+          label: "Peak grid change",
+          delta: peakCut >= 0 ? "peak shaved" : "peak increased",
+          cls: peakCut >= 0 ? "good" : "bad"
         },
         {
-          value: `${mpcCase.kpis.peakGrid.toFixed(2)} MW`,
-          label: "Peak grid import",
-          delta: `${peakGain >= 0 ? "-" : "+"}${Math.abs(peakGain).toFixed(2)} MW vs baseline`,
-          cls: peakGain >= 0 ? "good" : "bad"
-        },
-        {
-          value: `${mpcCase.kpis.pue.toFixed(3)}`,
-          label: "Average PUE proxy",
-          delta: `Min target inlet ${mpcCase.kpis.minThermalTarget.toFixed(1)} degC`,
+          value: `${plan.kpis.shiftedEnergy.toFixed(1)} MWh`,
+          label: "Flexible load moved",
+          delta: "upper-layer scheduling effect",
           cls: "warn"
         },
         {
-          value: `${lowerCase.maxTempObserved.toFixed(1)} degC`,
-          label: "Max observed inlet temp",
-          delta: tempMargin >= 0 ? `${tempMargin.toFixed(1)} degC below hard line` : `${Math.abs(tempMargin).toFixed(1)} degC above hard line`,
+          value: `${lower.maxTemp.toFixed(1)} C`,
+          label: "Max inlet temperature",
+          delta: tempMargin >= 0 ? `${tempMargin.toFixed(1)} C below hard line` : `${Math.abs(tempMargin).toFixed(1)} C above hard line`,
           cls: tempMargin >= 0 ? "good" : "bad"
         },
         {
-          value: `${mpcCase.kpis.finalSoc.toFixed(1)} MWh`,
-          label: "Battery end-of-day SOC",
-          delta: `${exportDelta >= 0 ? "+" : ""}${exportDelta.toFixed(2)} export hours vs baseline`,
-          cls: exportDelta >= 0 ? "good" : "warn"
+          value: `${lower.maxTrackingError.toFixed(2)} MW`,
+          label: "Max tracking error",
+          delta: `trimmed by up to ${lower.maxTrim.toFixed(2)} MW`,
+          cls: lower.maxTrackingError < 1.2 ? "good" : "warn"
         }
       ];
 
@@ -1584,121 +1437,39 @@
       `).join("");
     }
 
-    function renderScenarioText(mpcCase, lowerCase, params) {
-      const preset = presets[state.preset];
-      const chargeHour = mpcCase.soc.findIndex((value) => value > params.bessEnergy * 0.78);
-      const maxPriceIndex = mpcCase.price.indexOf(max(mpcCase.price));
-      const minPriceIndex = mpcCase.price.indexOf(min(mpcCase.price));
-      const flexShift = params.flexShare.toFixed(0);
-      const pricePeakHour = mpcCase.hours[maxPriceIndex];
-      const lowPriceHour = mpcCase.hours[minPriceIndex];
-
-      document.getElementById("scenario-badge").textContent = `${preset.short} scenario`;
-      document.getElementById("scenario-title").textContent = preset.title;
-      document.getElementById("scenario-text").textContent =
-        `${preset.meta.event} Here the upper layer drives the battery toward ${params.bessEnergy > 0 ? "an evening reserve" : "a flat reserve"} and uses up to ${flexShift}% flexible compute to avoid expensive grid hours.`;
-
-      document.getElementById("scenario-list").innerHTML = `
-        <li>Cheapest signal window: around ${String(Math.floor(lowPriceHour)).padStart(2, "0")}:00, when charging and shifted workloads make sense.</li>
-        <li>Highest scarcity signal: around ${String(Math.floor(pricePeakHour)).padStart(2, "0")}:00, when the planner prefers discharge and thermal relaxation.</li>
-        <li>Selected live window: ${String(lowerCase.hour).padStart(2, "0")}:00, where the lower controller absorbs a forecast miss of ${params.disturbance.toFixed(0)}% severity.</li>
-      `;
-
-      const summaryBits = [
-        `The upper layer charges hardest near ${String(Math.floor(lowPriceHour)).padStart(2, "0")}:00`,
-        `targets the battery for the evening ramp`,
-        `and pre-cools down to ${mpcCase.kpis.minThermalTarget.toFixed(1)} degC before the hot period`
-      ];
-
-      if (chargeHour >= 0) {
-        summaryBits.push(`while reaching roughly 80% SOC by ${String(Math.floor(mpcCase.hours[chargeHour])).padStart(2, "0")}:00`);
-      }
-
-      document.getElementById("demo-summary").textContent = `${summaryBits.join(", ")}. The lower layer then trims battery power by up to ${max(lowerCase.battTrim.map((value) => Math.abs(value))).toFixed(2)} MW to keep the live grid trajectory on plan.`;
-    }
-
-    function renderSafety(mpcCase, lowerCase, params) {
-      const reservePct = ((params.bessEnergy * 0.12) / params.bessEnergy) * 100;
-      const items = [
-        {
-          title: "Thermal hard limit and rollback",
-          text: `A hard line sits at 27 degC. If live inlet temperature approaches it, the lower layer sacrifices economics first and increases cooling immediately.`
-        },
-        {
-          title: "Battery reserve policy",
-          text: `The battery keeps roughly ${reservePct.toFixed(0)}% as an emergency reserve. The upper plan can aim higher for evening scarcity, but it does not schedule to zero.`
-        },
-        {
-          title: "Forecast-aware, not forecast-blind",
-          text: `The daily planner uses price, carbon, PV, and thermal forecasts. The real-time layer only handles residual error and actuator coordination.`
-        },
-        {
-          title: "Operational observability",
-          text: `This demo surfaces the metrics I would want in production: cost, carbon, peak import, max inlet temperature, SOC trajectory, and tracking error.`
-        },
-        {
-          title: "Clear control contract",
-          text: `Upper outputs: grid target, SOC path, and thermal target. Lower outputs: fan, chiller, and BESS trim. That separation keeps ownership and failure analysis clean.`
-        }
-      ];
-
-      document.getElementById("safety-list").innerHTML = items.map((item) => `
-        <div class="mini-item">
-          <strong>${item.title}</strong>
-          <span>${item.text}</span>
-        </div>
-      `).join("");
-    }
-
-    function renderAllCharts(mpcCase, baselineCase, lowerCase) {
-      const hourLabels = mpcCase.hours.map((hour, index) => (index % 12 === 0 ? `${String(hour).padStart(2, "0")}:00` : ""));
-
-      makeLegend("legend-market", [
-        { name: "Day-ahead price", color: COLORS.price },
-        { name: "Carbon intensity", color: COLORS.carbon }
+    function renderCharts(plan, lower) {
+      const dayLabels = plan.hours.map((hour, index) => index % 12 === 0 ? `${String(hour).padStart(2, "0")}:00` : "");
+      makeLegend("legend-inputs", [
+        { name: "Price", color: COLORS.price },
+        { name: "Base IT load", color: COLORS.baseLoad },
+        { name: "Scheduled IT load", color: COLORS.scheduledLoad }
       ]);
-      renderChart("chart-market", {
-        labels: hourLabels,
+      renderChart("chart-inputs", {
+        labels: dayLabels,
         series: [
-          { data: mpcCase.price, color: COLORS.price, axis: "left", type: "line" },
-          { data: mpcCase.carbon, color: COLORS.carbon, axis: "right", type: "line" }
+          { data: plan.price, color: COLORS.price, axis: "left", type: "line" },
+          { data: plan.baseLoad, color: COLORS.baseLoad, axis: "right", type: "line", strokeDasharray: "5 4", opacity: 0.95 },
+          { data: plan.scheduledLoad, color: COLORS.scheduledLoad, axis: "right", type: "line" }
         ],
         leftFormatter: (value) => `${value.toFixed(0)}`,
-        rightFormatter: (value) => `${value.toFixed(0)}`,
-        tickEvery: 12
-      });
-
-      makeLegend("legend-facility", [
-        { name: "PV forecast", color: COLORS.pv },
-        { name: "Scheduled IT load", color: COLORS.it },
-        { name: "Ambient temperature", color: COLORS.ambient }
-      ]);
-      renderChart("chart-facility", {
-        labels: hourLabels,
-        series: [
-          { data: mpcCase.pv, color: COLORS.pv, axis: "left", type: "area", opacity: 0.18 },
-          { data: mpcCase.pv, color: COLORS.pv, axis: "left", type: "line", opacity: 0.96 },
-          { data: mpcCase.itScheduled, color: COLORS.it, axis: "left", type: "line" },
-          { data: mpcCase.ambient, color: COLORS.ambient, axis: "right", type: "line", opacity: 0.9 }
-        ],
-        leftFormatter: (value) => `${value.toFixed(1)}`,
-        rightFormatter: (value) => `${value.toFixed(0)}`,
+        rightFormatter: (value) => `${value.toFixed(1)}`,
         tickEvery: 12
       });
 
       makeLegend("legend-upper", [
+        { name: "PV forecast", color: COLORS.pv },
         { name: "Grid target", color: COLORS.grid },
         { name: "Battery dispatch", color: COLORS.battery },
-        { name: "SOC", color: COLORS.soc },
         { name: "Thermal target", color: COLORS.tempTarget }
       ]);
       renderChart("chart-upper", {
-        labels: hourLabels,
+        labels: dayLabels,
         series: [
-          { data: mpcCase.grid, color: COLORS.grid, axis: "left", type: "line" },
-          { data: mpcCase.batteryPower, color: COLORS.battery, axis: "left", type: "bar", opacity: 0.5 },
-          { data: mpcCase.soc, color: COLORS.soc, axis: "right", type: "line" },
-          { data: mpcCase.thermalTarget, color: COLORS.tempTarget, axis: "right", type: "line", opacity: 0.85 }
+          { data: plan.pv, color: COLORS.pv, axis: "left", type: "area", opacity: 0.14 },
+          { data: plan.pv, color: COLORS.pv, axis: "left", type: "line", opacity: 0.95 },
+          { data: plan.grid, color: COLORS.grid, axis: "left", type: "line" },
+          { data: plan.batteryPower, color: COLORS.battery, axis: "left", type: "bar", opacity: 0.45 },
+          { data: plan.thermalTarget, color: COLORS.tempTarget, axis: "right", type: "line" }
         ],
         leftFormatter: (value) => `${value.toFixed(1)}`,
         rightFormatter: (value) => `${value.toFixed(1)}`,
@@ -1706,31 +1477,50 @@
         tickEvery: 12
       });
 
-      document.getElementById("zoom-hour-label").textContent = `${String(lowerCase.hour).padStart(2, "0")}:00`;
-      const lowerLabels = lowerCase.time.map((t, index) => {
-        const mins = Math.round((t % 1) * 60);
-        return index % 2 === 0 ? `${String(Math.floor(t)).padStart(2, "0")}:${String(mins).padStart(2, "0")}` : "";
+      const zoomLabels = lower.time.map((value, index) => {
+        const minutes = Math.round((value % 1) * 60);
+        return index % 2 === 0 ? `${String(Math.floor(value)).padStart(2, "0")}:${String(minutes).padStart(2, "0")}` : "";
       });
+      document.getElementById("zoom-label").textContent = `${String(lower.hour).padStart(2, "0")}:00 to ${String((lower.hour + 1) % 24).padStart(2, "0")}:00`;
 
       makeLegend("legend-lower", [
-        { name: "Grid target", color: COLORS.grid },
-        { name: "Actual grid", color: COLORS.actual },
-        { name: "Actual inlet temp", color: COLORS.temp },
-        { name: "Thermal hard line", color: COLORS.red }
+        { name: "Target grid", color: COLORS.grid },
+        { name: "Actual grid", color: COLORS.actualGrid },
+        { name: "Actual inlet temp", color: COLORS.tempActual },
+        { name: "Hard thermal line", color: COLORS.hardLine }
       ]);
       renderChart("chart-lower", {
-        labels: lowerLabels,
+        labels: zoomLabels,
         series: [
-          { data: lowerCase.targetGrid, color: COLORS.grid, axis: "left", type: "line" },
-          { data: lowerCase.actualGrid, color: COLORS.actual, axis: "left", type: "line", opacity: 0.92 },
-          { data: lowerCase.actualTemp, color: COLORS.temp, axis: "right", type: "line" },
-          { data: lowerCase.targetTemp, color: COLORS.tempTarget, axis: "right", type: "line", opacity: 0.85 }
+          { data: lower.targetGrid, color: COLORS.grid, axis: "left", type: "line" },
+          { data: lower.actualGrid, color: COLORS.actualGrid, axis: "left", type: "line" },
+          { data: lower.targetTemp, color: COLORS.tempTarget, axis: "right", type: "line", strokeDasharray: "5 4", opacity: 0.9 },
+          { data: lower.actualTemp, color: COLORS.tempActual, axis: "right", type: "line" }
         ],
         leftFormatter: (value) => `${value.toFixed(1)}`,
         rightFormatter: (value) => `${value.toFixed(1)}`,
         thresholds: [
-          { value: 27, axis: "right", color: COLORS.red, label: "27 degC hard line" }
+          { value: 27, axis: "right", color: COLORS.hardLine, label: "27 C" }
         ],
+        tickEvery: 2
+      });
+
+      makeLegend("legend-actuator", [
+        { name: "Battery trim", color: COLORS.trim },
+        { name: "Fan", color: COLORS.fan },
+        { name: "Chiller", color: COLORS.chiller }
+      ]);
+      renderChart("chart-actuator", {
+        labels: zoomLabels,
+        series: [
+          { data: lower.batteryTrim, color: COLORS.trim, axis: "left", type: "bar", opacity: 0.5 },
+          { data: lower.fanPct, color: COLORS.fan, axis: "right", type: "line" },
+          { data: lower.chillerPct, color: COLORS.chiller, axis: "right", type: "line", strokeDasharray: "5 4" }
+        ],
+        leftFormatter: (value) => `${value.toFixed(1)}`,
+        rightFormatter: (value) => `${value.toFixed(0)}`,
+        includeZeroLeft: true,
+        rightDomain: [0, 100],
         tickEvery: 2
       });
     }
@@ -1739,20 +1529,19 @@
       const params = readInputs();
       updateValueLabels(params);
 
-      const baselineCase = simulateFacility(params, state.meta, false);
-      const mpcCase = simulateFacility(params, state.meta, true);
-      const lowerCase = simulateLowerLayer(mpcCase, params);
+      const baseline = simulateDay(params, state.meta, false);
+      const plan = simulateDay(params, state.meta, true);
+      const lower = simulateLowerLayer(plan, params);
 
-      renderKpis(mpcCase, baselineCase, lowerCase);
-      renderScenarioText(mpcCase, lowerCase, params);
-      renderSafety(mpcCase, lowerCase, params);
-      renderAllCharts(mpcCase, baselineCase, lowerCase);
+      renderStory(plan, lower, params);
+      renderImpacts(plan, lower);
+      renderKpis(plan, baseline, lower);
+      renderCharts(plan, lower);
     }
 
     function bindInputs() {
       Object.keys(sliderMeta).forEach((key) => {
-        const input = document.getElementById(key);
-        input.addEventListener("input", render);
+        document.getElementById(key).addEventListener("input", render);
       });
       window.addEventListener("resize", render);
     }
